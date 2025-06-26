@@ -2,6 +2,40 @@ import { write } from 'bun'
 
 import { removeWholeSentenceWithSubstring } from './utilities'
 
+/**
+ * Sentences that include this substrings will be cut.
+ *
+ * WaniKani has a lot of unnecessary explanations that tend to repeat
+ * thousands of times across many mnemonics. Since we want only mnemonics
+ * without any additional explanations (and visual clutter),
+ * we will be removing them.
+ *
+ * If there are no mnemonic, it means it either not on wanikani,
+ * or consists entirely of unneccessary explanations. Check WK level tag.
+ *
+ * False positives may apply. If you see one, report it.
+ */
+const UNNECESSARY = [
+  "anji portion uses the kun'yomi reading",
+  'are exactly the same',
+  'consists of a kanji with hiragana',
+  'ends with an う',
+  'hiragana attached',
+  'his is a jukugo word',
+  'ince this word',
+  'kanji and the word are exactly the same',
+  'know the readings',
+  'mnemonic to help',
+  'on your own',
+  'ord is made up',
+  'ou know the readings',
+  'ou should be able',
+  'same as the one you learned',
+  'share meanings as well',
+  'share same meaning',
+  'い on the end',
+]
+
 export type WKResponse<T> = {
   object: string
   url: string
@@ -14,7 +48,7 @@ export type WKResponse<T> = {
   data_updated_at: string
   data: WKObject<T>[]
 }
-export type WKObject<T> = {
+export type WKObject<T = WKAnySubject> = {
   id: number
   object: string
   url: string
@@ -102,7 +136,7 @@ export type WKVocab = WKKana & {
 export type WKAnySubject = WKRadical | WKKanji | WKKana | WKVocab
 
 export async function downloadWK() {
-  const subjects: WKObject<WKAnySubject>[] = []
+  const subjects: WKObject[] = []
   let nextUrl: string | undefined = 'https://api.wanikani.com/v2/subjects'
   while (nextUrl) {
     console.log(nextUrl)
@@ -121,43 +155,10 @@ export async function downloadWK() {
   }
   await write('assets/WK.json', JSON.stringify(subjects, undefined, 2))
 }
-export const WK: WKObject<WKAnySubject>[] = []
-
-/**
- * Sentences that include this substrings will be cut.
- *
- * WaniKani has a lot of unnecessary explanations that tend to repeat
- * thousands of times across many mnemonics. Since we want only mnemonics
- * without any additional explanations (and visual clutter),
- * we will be removing them.
- *
- * If there are no mnemonic, it means it either not on wanikani,
- * or consists entirely of unneccessary explanations. Check WK level tag.
- *
- * False positives may apply. If you see one, report it.
- */
-const unnecessary = [
-  "anji portion uses the kun'yomi reading",
-  'are exactly the same',
-  'consists of a kanji with hiragana',
-  'ends with an う',
-  'hiragana attached',
-  'his is a jukugo word',
-  'ince this word',
-  'kanji and the word are exactly the same',
-  'know the readings',
-  'mnemonic to help',
-  'on your own',
-  'ord is made up',
-  'ou know the readings',
-  'ou should be able',
-  'same as the one you learned',
-  'share meanings as well',
-  'share same meaning',
-]
+export const WK: WKObject[] = []
 
 export function cutUnnecessary(text: string) {
-  for (let index = 0; index < unnecessary.length; index++)
-    text = removeWholeSentenceWithSubstring(text, unnecessary[index]!)
+  for (let index = 0; index < UNNECESSARY.length; index++)
+    text = removeWholeSentenceWithSubstring(text, UNNECESSARY[index]!)
   return text
 }

@@ -26,11 +26,7 @@ export function cleanupHTML(
   ],
 ) {
   text = text
-    .replaceAll('<br>', '\n') // br to \n
-    .split('\n')
-    .map((element) => element.trim()) // trim every line
-    .join('\n')
-    .replaceAll(/\n{2,}/gs, '\n') // no more than one new line
+    .replaceAll('\n', '')
     .replaceAll(/<(\S+)(>|\s[^>]*>)\s*<\/\1>/g, '') // empty tags
     .trim() // final trim
   return [...text.matchAll(/<.+?>/g)]

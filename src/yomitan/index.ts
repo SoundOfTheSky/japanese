@@ -10,18 +10,18 @@ const dictionary = new YomitanDictionary({
   author: 'SoundOfTheSky',
   description: '',
   downloadUrl:
-    'https://github.com/SoundOfTheSky/yomitan-sky/raw/refs/heads/main/dist/Sky.zip',
+    'https://github.com/SoundOfTheSky/japanese/raw/refs/heads/main/dist/Sky.zip',
   format: 3,
   indexUrl:
-    'https://github.com/SoundOfTheSky/yomitan-sky/raw/refs/heads/main/dist/Sky.json',
+    'https://github.com/SoundOfTheSky/japanese/raw/refs/heads/main/dist/Sky.json',
   isUpdatable: true,
-  revision: '1.4.1-' + new Date().toISOString().split('T')[0],
+  revision: '1.5.1-' + new Date().toISOString().split('T')[0],
   sequenced: true,
   sourceLanguage: 'ja',
   targetLanguage: 'en',
   title: 'Sky',
   attribution: 'This dictionary simply combines following sources:',
-  url: 'https://github.com/SoundOfTheSky/yomitan-sky',
+  url: 'https://github.com/SoundOfTheSky/japanese',
 })
 
 // === Download assets and merge ===

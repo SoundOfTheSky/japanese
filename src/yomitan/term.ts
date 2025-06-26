@@ -1,5 +1,5 @@
 import { cleanupHTML } from '../utilities'
-import { cutUnnecessary, WK, WKKana, WKKanji, WKVocab } from '../wanikani'
+import { cutUnnecessary, WK, WKKana, WKObject, WKVocab } from '../wanikani'
 
 import {
   DefinitionContent,
@@ -10,19 +10,19 @@ import YomitanDictionary from './yomitan-dictionary'
 
 export function generateTerms(dictionary: YomitanDictionary) {
   console.log('Building term bank...')
-  const WKMap = new Map<string, WKVocab | WKKana>()
-  const WKKanjiById = new Map<number, WKKanji>()
+  dictionary.term.sort((a, b) => a[4] - b[4])
+  const WKMap = new Map<string, WKObject<WKVocab | WKKana>>()
+  const subjects = []
   for (const subject of WK) {
-    if (subject.object === 'kanji' && !subject.data.hidden_at)
-      WKKanjiById.set(subject.id, subject.data as WKKanji)
     if (
       (subject.object !== 'vocabulary' &&
         subject.object !== 'kana_vocabulary') ||
       subject.data.hidden_at
     )
       continue
-    const vocab = subject.data as WKVocab | WKKana
-    WKMap.set(vocab.characters, vocab)
+    const vocab = subject as WKObject<WKVocab | WKKana>
+    WKMap.set(vocab.data.characters, vocab)
+    subjects.push(vocab)
   }
 
   term: for (const item of dictionary.term) {
@@ -35,7 +35,7 @@ export function generateTerms(dictionary: YomitanDictionary) {
     }
     content.unshift({
       tag: 'span',
-      content: `WK ${wkItem.level}`,
+      content: `WK ${wkItem.data.level}`,
       title: 'WaniKani level',
       style: {
         fontWeight: 'bold',
@@ -53,10 +53,10 @@ export function generateTerms(dictionary: YomitanDictionary) {
     const meaning = WKToStructure(
       '#0AF',
       'WaniKani Meaning Mnemonic',
-      (wkItem as WKVocab).meaning_mnemonic,
+      wkItem.data.meaning_mnemonic,
     )
     if (meaning) content.push(meaning)
-    const readingWKMnemonic = (wkItem as WKVocab).reading_mnemonic
+    const readingWKMnemonic = (wkItem.data as WKVocab).reading_mnemonic
     if (readingWKMnemonic) {
       const reading = WKToStructure(
         '#F0A',
@@ -65,6 +65,25 @@ export function generateTerms(dictionary: YomitanDictionary) {
       )
       if (reading) content.push(reading)
     }
+    // const sameKanji = subjects.filter(
+    //   (subject) =>
+    //     subject.id !== wkItem.id &&
+    //     'component_subject_ids' in subject.data &&
+    //     'component_subject_ids' in wkItem.data &&
+    //     subject.data.component_subject_ids.length ===
+    //       wkItem.data.component_subject_ids.length &&
+    //     wkItem.data.component_subject_ids.every((d) =>
+    //       (subject.data as WKVocab).component_subject_ids.includes(d),
+    //     ),
+    // )
+    // if (sameKanji.length > 0)
+    //   content.push(
+    //     WKToStructure(
+    //       '#F0A',
+    //       'Same kanji',
+    //       sameKanji.map((x) => x.data.characters).join(', '),
+    //     )!,
+    //   )
   }
 }
 
