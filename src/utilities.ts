@@ -26,7 +26,7 @@ export function cleanupHTML(
   ],
 ) {
   text = text
-    .replaceAll('\n', '')
+    .replaceAll('\n', ' ')
     .replaceAll(/<(\S+)(>|\s[^>]*>)\s*<\/\1>/g, '') // empty tags
     .trim() // final trim
   return [...text.matchAll(/<.+?>/g)]
@@ -65,4 +65,8 @@ Priority: u=0, i`
     .map((x) => x.split(': ')) as [string, string][])
     headers.set(key, value)
   return headers
+}
+
+export function extractKanji(text: string): string[] {
+  return text.match(/\p{Script=Han}/gu) ?? []
 }

@@ -1,4 +1,4 @@
-import { write } from 'bun'
+import { file, write } from 'bun'
 
 import { removeWholeSentenceWithSubstring } from './utilities'
 
@@ -161,4 +161,12 @@ export function cutUnnecessary(text: string) {
   for (let index = 0; index < UNNECESSARY.length; index++)
     text = removeWholeSentenceWithSubstring(text, UNNECESSARY[index]!)
   return text
+}
+
+export async function loadWKFile() {
+  WK.splice(
+    0,
+    Infinity,
+    ...((await file('assets/WK.json').json()) as WKObject[]),
+  )
 }

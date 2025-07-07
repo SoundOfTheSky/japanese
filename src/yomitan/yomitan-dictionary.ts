@@ -2,6 +2,7 @@ import { mkdirSync, rmSync } from 'node:fs'
 import { cp, readdir, rename, rm, stat } from 'node:fs/promises'
 import Path from 'node:path'
 
+import { chunk } from '@softsky/utils'
 import { $, file } from 'bun'
 
 import { getDefaultHeaders } from '../utilities'
@@ -103,8 +104,8 @@ export default class YomitanDictionary {
 
   private async saveBank(bankName: Bank) {
     console.log(`Saving bank ${bankName}...`)
-    // const parts = chunk(this[bankName] as unknown[], 2000)
-    const parts = [this[bankName] as unknown[]]
+    const parts = chunk(this[bankName] as unknown[], 10_000)
+    // const parts = [this[bankName] as unknown[]]
     for (let index = 0; index < parts.length; index++)
       await file(
         Path.join(

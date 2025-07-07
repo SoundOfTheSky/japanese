@@ -10,7 +10,6 @@ import YomitanDictionary from './yomitan-dictionary'
 
 export function generateTerms(dictionary: YomitanDictionary) {
   console.log('Building term bank...')
-  dictionary.term.sort((a, b) => a[4] - b[4])
   const WKMap = new Map<string, WKObject<WKVocab | WKKana>>()
   const subjects = []
   for (const subject of WK) {
@@ -65,25 +64,6 @@ export function generateTerms(dictionary: YomitanDictionary) {
       )
       if (reading) content.push(reading)
     }
-    // const sameKanji = subjects.filter(
-    //   (subject) =>
-    //     subject.id !== wkItem.id &&
-    //     'component_subject_ids' in subject.data &&
-    //     'component_subject_ids' in wkItem.data &&
-    //     subject.data.component_subject_ids.length ===
-    //       wkItem.data.component_subject_ids.length &&
-    //     wkItem.data.component_subject_ids.every((d) =>
-    //       (subject.data as WKVocab).component_subject_ids.includes(d),
-    //     ),
-    // )
-    // if (sameKanji.length > 0)
-    //   content.push(
-    //     WKToStructure(
-    //       '#F0A',
-    //       'Same kanji',
-    //       sameKanji.map((x) => x.data.characters).join(', '),
-    //     )!,
-    //   )
   }
 }
 
