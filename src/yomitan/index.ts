@@ -1,3 +1,5 @@
+import { appendFile } from 'node:fs/promises'
+
 import { file } from 'bun'
 
 import { downloadWK, loadWKFile } from '../wanikani'
@@ -15,7 +17,7 @@ const dictionary = new YomitanDictionary({
   indexUrl:
     'https://github.com/SoundOfTheSky/japanese/raw/refs/heads/main/dist/Sky.json',
   isUpdatable: true,
-  revision: '1.5.2-' + new Date().toISOString().split('T')[0],
+  revision: '1.6.0-' + new Date().toISOString().split('T')[0],
   sequenced: true,
   sourceLanguage: 'ja',
   targetLanguage: 'en',
@@ -36,13 +38,51 @@ await dictionary.merge(
   'kanjidic',
   'https://github.com/yomidevs/jmdict-yomitan/releases/latest/download/KANJIDIC_english.zip',
 )
+await dictionary.merge(
+  'bccwj',
+  'https://github.com/toasted-nutbread/yomichan-bccwj-frequency-dictionary/releases/latest/download/BCCWJ-LUW.zip',
+)
+await dictionary.merge('アクセント辞典v2', './dist/アクセント辞典v2.zip')
 
-// === Process ===
+// === Add css ===
+await appendFile(
+  'dist/Sky/styles.css',
+  `
+div[data-sc-content="wkm"] {
+  border-color: #0AF;
+  background-color: color-mix(in srgb, #0AF 5%, transparent);
+}
+div[data-sc-content="wkr"] {
+  border-color: #F0A;
+  background-color: color-mix(in srgb, #F0A 5%, transparent);
+}
+  `,
+)
+
+// === Sort by popularity ===
 dictionary.kanji.sort(
   (a, b) =>
     (a[5].freq ? +a[5].freq : Infinity) - (b[5].freq ? +b[5].freq : Infinity),
 )
-dictionary.term.sort((a, b) => a[4] - b[4])
+const termFrequence = new Map<string, number>()
+// Build map for term frequency
+for (const termMeta of dictionary.term_meta) {
+  if (termMeta[1] !== 'freq') continue
+  termFrequence.set(
+    termMeta[0],
+    typeof termMeta[2] === 'object'
+      ? 'frequency' in termMeta[2]
+        ? +termMeta[2].frequency
+        : termMeta[2].value
+      : +termMeta[2],
+  )
+}
+dictionary.term.sort(
+  (a, b) =>
+    (termFrequence.get(a[0]) ?? Infinity) -
+    (termFrequence.get(b[0]) ?? Infinity),
+)
+
 dictionary.tag.push(['wk', 'misc', 0, 'WaniKani level', 0])
 generateTerms(dictionary)
 generateKanji(dictionary)

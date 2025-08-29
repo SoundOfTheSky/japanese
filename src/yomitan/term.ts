@@ -50,7 +50,7 @@ export function generateTerms(dictionary: YomitanDictionary) {
       },
     })
     const meaning = WKToStructure(
-      '#0AF',
+      'wkm',
       'WaniKani Meaning Mnemonic',
       wkItem.data.meaning_mnemonic,
     )
@@ -58,7 +58,7 @@ export function generateTerms(dictionary: YomitanDictionary) {
     const readingWKMnemonic = (wkItem.data as WKVocab).reading_mnemonic
     if (readingWKMnemonic) {
       const reading = WKToStructure(
-        '#F0A',
+        'wkr',
         'WaniKani Reading Mnemonic',
         readingWKMnemonic,
       )
@@ -66,37 +66,11 @@ export function generateTerms(dictionary: YomitanDictionary) {
     }
   }
 }
-
-function createBlock(
-  borderColor: string,
-  content: StructuredContent,
-): StructuredContentText {
-  return {
-    tag: 'div',
-    style: {
-      marginLeft: '0.5em',
-    },
-    content: {
-      tag: 'div',
-      content: {
-        tag: 'div',
-        style: {
-          borderStyle: 'none none none solid',
-          padding: '0.5rem',
-          borderRadius: '0.4rem',
-          borderWidth: 'calc(3em / var(--font-size-no-units, 14))',
-          marginTop: '0.5rem',
-          marginBottom: '0.5rem',
-          borderColor,
-          backgroundColor: `color-mix(in srgb, ${borderColor} 5%, transparent)`,
-        },
-        content,
-      },
-    },
-  }
-}
-
-function WKToStructure(borderColor: string, title: string, text: string) {
+function WKToStructure(
+  type: string,
+  title: string,
+  text: string,
+): StructuredContent | undefined {
   const content: StructuredContentText[] = [
     {
       tag: 'span',
@@ -160,22 +134,30 @@ function WKToStructure(borderColor: string, title: string, text: string) {
       }
     } else (content.at(-1)!.content as string) += char
   }
-  return createBlock(borderColor, [
-    {
-      tag: 'div',
-      content: title,
-      style: {
-        fontStyle: 'italic',
-        fontSize: '0.8em',
-        color: '#777',
+  return {
+    content: [
+      {
+        content: title,
+        data: {
+          type: '',
+          class: 'extra-label',
+        },
+        tag: 'div',
       },
-    },
-    {
-      tag: 'div',
-      style: {
-        marginLeft: '0.5rem',
+      {
+        content,
+        data: {
+          type: '',
+          class: 'extra-content',
+        },
+        tag: 'div',
       },
-      content,
+    ],
+    data: {
+      type: '',
+      class: 'extra-box',
+      content: type,
     },
-  ])
+    tag: 'div',
+  }
 }

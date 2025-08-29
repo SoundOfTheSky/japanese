@@ -34,6 +34,7 @@ const UNNECESSARY = [
   'share meanings as well',
   'share same meaning',
   'い on the end',
+  'eadings you',
 ]
 
 export type WKResponse<T> = {

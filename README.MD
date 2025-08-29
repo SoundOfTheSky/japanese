@@ -27,7 +27,7 @@ It's just a tooling that I use to learn japanese.
    6. Configure auto copy to lookup in Yomitan
       1. `Topbar -> AJT -> Autocopy options`
       2. Remove everything in list
-      3. Add field `Expression`
+      3. Add field `Expression` and `Sentence`
       4. Enable `Activate autocopy`, `Copy when answer is shown`
       5. Disable everything else
    7. Configure auto sort by frequency

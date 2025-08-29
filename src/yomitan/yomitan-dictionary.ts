@@ -1,5 +1,5 @@
 import { mkdirSync, rmSync } from 'node:fs'
-import { cp, readdir, rename, rm, stat } from 'node:fs/promises'
+import { cp, readdir, rename, rm } from 'node:fs/promises'
 import Path from 'node:path'
 
 import { chunk } from '@softsky/utils'
@@ -59,9 +59,11 @@ export default class YomitanDictionary {
     if (!(await file(indexPath).exists())) {
       console.log(`Downloading ${name}...`)
       await file(`${path}.zip`).write(
-        await fetch(url, {
-          headers: getDefaultHeaders(),
-        }),
+        url.startsWith('http')
+          ? await fetch(url, {
+              headers: getDefaultHeaders(),
+            })
+          : file(url),
       )
       await $`unzip ${path}.zip -d ${path}`
       await rm(path + '.zip', {
@@ -71,11 +73,14 @@ export default class YomitanDictionary {
     console.log(`Merging ${name}...`)
     for (const bank of BANKS) await this.mergeBanks(name, bank)
     for (const fileName of await readdir(path)) {
-      const path2 = Path.join(path, fileName)
-      if (await stat(path2).then((x) => x.isDirectory()))
-        await cp(path2, Path.join('dist', this.index.title, fileName), {
+      if (fileName.endsWith('.json')) continue
+      await cp(
+        Path.join(path, fileName),
+        Path.join('dist', this.index.title, fileName),
+        {
           recursive: true,
-        })
+        },
+      )
     }
     const index = (await file(indexPath).json()) as DictionaryIndex
     this.index.attribution ??= ''
