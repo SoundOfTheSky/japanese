@@ -40,8 +40,6 @@ It's just a tooling that I use to learn japanese.
       1. [Main](https://github.com/SoundOfTheSky/japanese/raw/refs/heads/main/dist/Sky.zip)
       2. [Grammar](https://github.com/aiko-tanaka/Grammar-Dictionaries?tab=readme-ov-file). I recommend DOJG & edewakaru (yes, both).
       3. [JMnedict](https://github.com/yomidevs/jmdict-yomitan)
-      4. [Frequency BCCWJ](https://github.com/Kuuuube/yomitan-dictionaries?tab=readme-ov-file#bccwj-suw-luw-combined)
-      5. [Pitch Daijisen](https://drive.google.com/file/d/13NvR5uQ1zAIpvAcSee0bEEvENILbFGbL/view)
    3. Import dictionaries in yomitan in this exact order
    4. Connect Anki
       1. Enable `Anki -> Enable Anki integration`
