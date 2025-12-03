@@ -44,29 +44,6 @@ export function cleanupHTML(
     )
 }
 
-export const getDefaultHeaders = () => {
-  const headers = new Headers()
-  for (const [
-    key,
-    value,
-  ] of `User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
-Accept-Language: en-US,en;q=0.5
-Accept-Encoding: gzip, deflate, br, zstd
-DNT: 1
-Sec-GPC: 1
-Connection: keep-alive
-Upgrade-Insecure-Requests: 1
-Sec-Fetch-Dest: document
-Sec-Fetch-Mode: navigate
-Sec-Fetch-Site: cross-site
-Priority: u=0, i`
-    .split('\n')
-    .map((x) => x.split(': ')) as [string, string][])
-    headers.set(key, value)
-  return headers
-}
-
 export function extractKanji(text: string): string[] {
   return text.match(/\p{Script=Han}/gu) ?? []
 }

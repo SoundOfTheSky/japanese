@@ -6,7 +6,9 @@ import YomitanDictionary from './yomitan-dictionary'
 export function generateKanji(dictionary: YomitanDictionary) {
   console.log('Building kanji bank...')
   // Find WK object by kanji
-  const WKKanjiCharMap = new Map<string, WKObject>()
+  const WKKanjiCharMap = new Map<string, WKObject<WKKanji>>()
+  // Find WK object by kanji
+  const WKRadicalCharMap = new Map<string, WKObject<WKRadical>>()
   // Find WK object by id
   const WKIdMap = new Map<number, WKObject>()
   // Filtered subjects
@@ -15,36 +17,47 @@ export function generateKanji(dictionary: YomitanDictionary) {
   for (const subject of WK) {
     if (subject.data.hidden_at) continue
     const s = subject as WKObject
-    if (s.data.characters && s.object === 'kanji')
-      WKKanjiCharMap.set(s.data.characters, s)
+    if (s.data.characters) {
+      if (s.object === 'kanji')
+        WKKanjiCharMap.set(s.data.characters, s as WKObject<WKKanji>)
+      else if (s.object === 'radical')
+        WKRadicalCharMap.set(s.data.characters, s as WKObject<WKRadical>)
+    }
     WKIdMap.set(s.id, s)
     subjects.push(s)
   }
   for (let index = 0; index < dictionary.kanji.length; index++) {
     const item = dictionary.kanji[index]!
-    const wkItem = WKKanjiCharMap.get(item[0]) as WKObject<WKKanji> | undefined
-    if (!wkItem) continue
+    const wkKanji = WKKanjiCharMap.get(item[0])
+    const wkRadical = WKRadicalCharMap.get(item[0])
+    if (!wkKanji && !wkRadical) continue
     // Similar kanji
-    const similar = subjects.filter(
-      (subject) =>
-        subject.object === 'kanji' &&
-        subject.id !== wkItem.id &&
-        (wkItem.data.visually_similar_subject_ids.includes(subject.id) ||
-          ((subject.data as WKKanji).component_subject_ids.length ===
-            wkItem.data.component_subject_ids.length &&
-            wkItem.data.component_subject_ids.every((d) =>
-              (subject.data as WKKanji).component_subject_ids.includes(d),
-            ))),
-    )
+    const similar = wkKanji
+      ? subjects.filter(
+          (subject) =>
+            subject.object === 'kanji' &&
+            subject.id !== wkKanji.id &&
+            (wkKanji.data.visually_similar_subject_ids.includes(subject.id) ||
+              ((subject.data as WKKanji).component_subject_ids.length ===
+                wkKanji.data.component_subject_ids.length &&
+                wkKanji.data.component_subject_ids.every((d) =>
+                  (subject.data as WKKanji).component_subject_ids.includes(d),
+                ))),
+        )
+      : []
     // Other kanji with same radicals
-    const kanjiWithRadical = wkItem.data.component_subject_ids.map((id) => {
+    const componentSubjectIds: number[] = []
+    if (wkKanji) componentSubjectIds.push(...wkKanji.data.component_subject_ids)
+    if (wkRadical && !componentSubjectIds.includes(wkRadical.id))
+      componentSubjectIds.push(wkRadical.id)
+    const kanjiWithRadical = componentSubjectIds.map((id) => {
       const radical = WKIdMap.get(id)! as WKObject<WKRadical>
       return [
         `${radical.data.characters ?? ''}(${radical.data.slug})`,
         subjects
           .filter(
             (s) =>
-              s.id !== wkItem.id &&
+              s.data.characters !== item[0] &&
               s.object === 'kanji' &&
               (s.data as WKKanji).component_subject_ids.includes(id),
           )
@@ -52,59 +65,59 @@ export function generateKanji(dictionary: YomitanDictionary) {
           .join(''),
       ]
     })
-    // Add onyomi from WK
-    item[1] = [
-      ...new Set([
-        ...wkItem.data.readings
-          .filter((r) => r.type === 'onyomi')
-          .sort((a, b) => (a.primary ? 0 : 1) - (b.primary ? 0 : 1))
-          .map((x) => x.reading),
-        ...item[1].split(' '),
-      ]),
-    ].join(' ')
-    // Add kunyomi from WK
-    item[2] = [
-      ...new Set([
-        ...wkItem.data.readings
-          .filter((r) => r.type === 'kunyomi')
-          .sort((a, b) => (a.primary ? 0 : 1) - (b.primary ? 0 : 1))
-          .map((x) => x.reading),
-        ...item[2].split(' '),
-      ]),
-    ].join(' ')
+    if (wkKanji) {
+      // Add onyomi from WK
+      item[1] = [
+        ...new Set([
+          ...wkKanji.data.readings
+            .filter((r) => r.type === 'onyomi')
+            .sort((a, b) => (a.primary ? 0 : 1) - (b.primary ? 0 : 1))
+            .map((x) => x.reading),
+          ...item[1].split(' '),
+        ]),
+      ].join(' ')
+      // Add kunyomi from WK
+      item[2] = [
+        ...new Set([
+          ...wkKanji.data.readings
+            .filter((r) => r.type === 'kunyomi')
+            .sort((a, b) => (a.primary ? 0 : 1) - (b.primary ? 0 : 1))
+            .map((x) => x.reading),
+          ...item[2].split(' '),
+        ]),
+      ].join(' ')
+      // Set WK level data
+      item[5].wk = wkKanji.data.level.toString()
+    }
     // Add meanings from WK
     item[4] = [
       ...new Set(
         [
-          ...wkItem.data.meanings
+          ...(wkKanji?.data.meanings
             .sort((a, b) => (a.primary ? 0 : 1) - (b.primary ? 0 : 1))
-            .map((x) => x.meaning),
+            .map((x) => x.meaning) ?? []),
+          ...(wkRadical?.data.meanings
+            .sort((a, b) => (a.primary ? 0 : 1) - (b.primary ? 0 : 1))
+            .map((x) => x.meaning) ?? []),
           ...item[4],
         ].map((x) => x.toLowerCase()),
       ),
       clearWKText(
-        // If only one component, we replace kanji mnemonic with a radical one
-        `WaniKani Meaning:\n${
-          wkItem.data.component_subject_ids.length === 1
-            ? (
-                WKIdMap.get(
-                  wkItem.data.component_subject_ids[0]!,
-                ) as WKObject<WKRadical>
-              ).data.meaning_mnemonic
-            : wkItem.data.meaning_mnemonic
-        }${wkItem.data.meaning_hint ? '\n' + wkItem.data.meaning_hint : ''}`,
-      ),
-      clearWKText(
-        `WaniKani Reading:\n${
-          wkItem.data.reading_mnemonic
-        }${wkItem.data.reading_hint ? '\n' + wkItem.data.reading_hint : ''}`,
+        `WaniKani Meaning:\n${wkRadical?.data.meaning_mnemonic ?? wkKanji!.data.meaning_mnemonic}`,
       ),
     ]
+    if (wkKanji)
+      item[4].push(
+        clearWKText(
+          `WaniKani Reading:\n${
+            wkKanji.data.reading_mnemonic
+          }${wkKanji.data.reading_hint ? '\n' + wkKanji.data.reading_hint : ''}`,
+        ),
+      )
     if (similar.length > 0)
       item[4].push('Similar: ' + similar.map((x) => x.data.characters).join(''))
     for (const [radical, words] of kanjiWithRadical)
       item[4].push(`${radical}: ${words}`)
-    item[5].wk = wkItem.data.level.toString()
   }
 
   // Build maps for faster lookups
@@ -152,12 +165,10 @@ export function generateKanji(dictionary: YomitanDictionary) {
         x = []
         kanjiTermMap.set(kanji[index]!, x)
       }
-      // If short check that where are no duplicates.
-      // If long, check there are no words that already start the same.
+      // No duplicates, if long, check there are no words that already start the same.
       if (
-        item[0].length > 3
-          ? x.some((x) => item[0].startsWith(x))
-          : x.includes(item[0])
+        x.includes(item[0]) ||
+        (item[0].length > 3 && x.some((x) => item[0].startsWith(x)))
       )
         continue
       x.push(item[0])
@@ -166,17 +177,18 @@ export function generateKanji(dictionary: YomitanDictionary) {
   // Add additional fields after WK population
   for (let index = 0; index < dictionary.kanji.length; index++) {
     const item = dictionary.kanji[index]!
-    const sameOnyomi = item[1]
-      .split(' ')
-      .filter(Boolean)
-      .flatMap((x) => onyomiMap.get(x) ?? [])
-    const sameKunyomi = item[2]
-      .split(' ')
-      .filter(Boolean)
-      .flatMap((x) => kunyomiMap.get(x) ?? [])
-    const sameMeaning = item[4]
-      .filter((x) => x && !x.includes(':'))
-      .flatMap((x) => meaningMap.get(x) ?? [])
+    const getFromMap = (map: Map<string, string[]>) => [
+      ...new Set(
+        item[1]
+          .split(' ')
+          .filter(Boolean)
+          .flatMap((x) => map.get(x) ?? [])
+          .filter((x) => x !== item[0]),
+      ),
+    ]
+    const sameOnyomi = getFromMap(onyomiMap)
+    const sameKunyomi = getFromMap(kunyomiMap)
+    const sameMeaning = getFromMap(meaningMap)
     const termsInclude = kanjiTermMap.get(item[0]) ?? []
     if (sameMeaning.length > 0) item[4].push('Meaning: ' + sameMeaning.join(''))
     if (sameKunyomi.length > 0) item[4].push('Kunyomi: ' + sameKunyomi.join(''))

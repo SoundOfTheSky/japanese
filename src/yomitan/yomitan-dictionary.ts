@@ -1,11 +1,9 @@
 import { mkdirSync, rmSync } from 'node:fs'
-import { cp, readdir, rename, rm } from 'node:fs/promises'
+import { cp, readdir, rename } from 'node:fs/promises'
 import Path from 'node:path'
 
 import { chunk } from '@softsky/utils'
 import { $, file } from 'bun'
-
-import { getDefaultHeaders } from '../utilities'
 
 import {
   DictionaryIndex,
@@ -27,46 +25,38 @@ export default class YomitanDictionary {
   public term_meta: DictionaryTermMetaBankV3 = []
 
   public constructor(public index: DictionaryIndex) {
-    const path = Path.join('dist', index.title)
-    rmSync(path, {
+    rmSync(Path.join('assets', index.title), {
       force: true,
       recursive: true,
     })
-    rmSync(path + '.zip', {
-      force: true,
-    })
-    mkdirSync(path, {
+    mkdirSync(Path.join('assets', index.title), {
       recursive: true,
+    })
+    rmSync(Path.join('dist', index.title) + '.zip', {
+      force: true,
     })
   }
 
   public async save() {
-    const path = Path.join('dist', this.index.title)
+    const path = Path.join('assets', this.index.title)
     const indexPath = Path.join(path, 'index.json')
     await file(indexPath).write(JSON.stringify(this.index))
     for (const bank of BANKS) await this.saveBank(bank)
-    await $`zip -r -9 ../${this.index.title}.zip ./*`.cwd(path)
-    await rename(indexPath, path + '.json')
-    await rm(path, {
-      force: true,
-      recursive: true,
-    })
+    await $`7z a -tzip -mx=9 ../../dist/${this.index.title}.zip ./*`.cwd(path)
+    await rename(indexPath, Path.join('dist', this.index.title + '.json'))
+    // rmSync(path, {
+    //   force: true,
+    //   recursive: true,
+    // })
   }
 
-  public async merge(name: string, url: string) {
+  public async merge(name: string) {
     const path = Path.join('assets', name)
     const indexPath = Path.join(path, 'index.json')
     if (!(await file(indexPath).exists())) {
-      console.log(`Downloading ${name}...`)
-      await file(`${path}.zip`).write(
-        url.startsWith('http')
-          ? await fetch(url, {
-              headers: getDefaultHeaders(),
-            })
-          : file(url),
-      )
+      console.log(`Unzipping ${name}...`)
       await $`unzip ${path}.zip -d ${path}`
-      await rm(path + '.zip', {
+      rmSync(path + '.zip', {
         force: true,
       })
     }
@@ -76,7 +66,7 @@ export default class YomitanDictionary {
       if (fileName.endsWith('.json')) continue
       await cp(
         Path.join(path, fileName),
-        Path.join('dist', this.index.title, fileName),
+        Path.join('assets', this.index.title, fileName),
         {
           recursive: true,
         },
@@ -84,7 +74,7 @@ export default class YomitanDictionary {
     }
     const index = (await file(indexPath).json()) as DictionaryIndex
     this.index.attribution ??= ''
-    this.index.attribution += `\n\n=== ${name} ===\nLink: ${url}\n`
+    this.index.attribution += `\n\n=== ${name} ===\n`
     if (index.attribution) this.index.attribution += index.attribution
   }
 
@@ -114,7 +104,7 @@ export default class YomitanDictionary {
     for (let index = 0; index < parts.length; index++)
       await file(
         Path.join(
-          'dist',
+          'assets',
           this.index.title,
           `${bankName}_bank_${index + 1}.json`,
         ),
