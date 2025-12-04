@@ -103,16 +103,12 @@ export function generateKanji(dictionary: YomitanDictionary) {
         ].map((x) => x.toLowerCase()),
       ),
       clearWKText(
-        `WaniKani Meaning:\n${wkRadical?.data.meaning_mnemonic ?? wkKanji!.data.meaning_mnemonic}`,
+        `WaniKani Meaning:\n${wkRadical && !wkRadical.data.meaning_mnemonic.includes('radical is the same') ? wkRadical.data.meaning_mnemonic : wkKanji!.data.meaning_mnemonic}`,
       ),
     ]
     if (wkKanji)
       item[4].push(
-        clearWKText(
-          `WaniKani Reading:\n${
-            wkKanji.data.reading_mnemonic
-          }${wkKanji.data.reading_hint ? '\n' + wkKanji.data.reading_hint : ''}`,
-        ),
+        clearWKText(`WaniKani Reading:\n${wkKanji.data.reading_mnemonic}`),
       )
     if (similar.length > 0)
       item[4].push('Similar: ' + similar.map((x) => x.data.characters).join(''))
