@@ -17,7 +17,7 @@ const dictionary = new YomitanDictionary({
   indexUrl:
     'https://github.com/SoundOfTheSky/japanese/raw/refs/heads/main/dist/Sky.json',
   isUpdatable: true,
-  revision: '1.7.1-' + new Date().toISOString().split('T')[0],
+  revision: '1.7.2-' + new Date().toISOString().split('T')[0],
   sequenced: true,
   sourceLanguage: 'ja',
   targetLanguage: 'en',
