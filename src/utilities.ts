@@ -27,6 +27,7 @@ export function cleanupHTML(
 ) {
   text = text
     .replaceAll('\n', ' ')
+    .replaceAll('&nbsp;', ' ')
     .replaceAll(/<(\S+)(>|\s[^>]*>)\s*<\/\1>/g, '') // empty tags
     .trim() // final trim
   return [...text.matchAll(/<.+?>/g)]

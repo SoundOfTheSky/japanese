@@ -19,6 +19,7 @@ const UNNECESSARY = [
   "anji portion uses the kun'yomi reading",
   'are exactly the same',
   'consists of a kanji with hiragana',
+  'eadings you',
   'ends with an う',
   'hiragana attached',
   'his is a jukugo word',
@@ -34,7 +35,6 @@ const UNNECESSARY = [
   'share meanings as well',
   'share same meaning',
   'い on the end',
-  'eadings you',
 ]
 
 export type WKResponse<T> = {
@@ -136,6 +136,20 @@ export type WKVocab = WKKana & {
 }
 export type WKAnySubject = WKRadical | WKKanji | WKKana | WKVocab
 
+export const WK: WKObject[] = []
+
+export const WKRadicalMap = new Map<string, WKObject<WKRadical>>()
+export const WKKanjiMap = new Map<string, WKObject<WKKanji>>()
+export const WKVocabMap = new Map<string, WKObject<WKVocab>>()
+export const WKKanaMap = new Map<string, WKObject<WKKana>>()
+export const WKIdMap = new Map<number, WKObject>()
+
+export function cutUnnecessary(text: string) {
+  for (let index = 0; index < UNNECESSARY.length; index++)
+    text = removeWholeSentenceWithSubstring(text, UNNECESSARY[index]!)
+  return text
+}
+
 export async function downloadWK() {
   const subjects: WKObject[] = []
   let nextUrl: string | undefined = 'https://api.wanikani.com/v2/subjects'
@@ -155,19 +169,30 @@ export async function downloadWK() {
     }
   }
   await write('assets/WK.json', JSON.stringify(subjects, undefined, 2))
-}
-export const WK: WKObject[] = []
-
-export function cutUnnecessary(text: string) {
-  for (let index = 0; index < UNNECESSARY.length; index++)
-    text = removeWholeSentenceWithSubstring(text, UNNECESSARY[index]!)
-  return text
+  WK.splice(0, Infinity, ...subjects)
 }
 
-export async function loadWKFile() {
+try {
   WK.splice(
     0,
     Infinity,
     ...((await file('assets/WK.json').json()) as WKObject[]),
   )
+} catch {
+  await downloadWK()
+}
+
+for (const subject of WK) {
+  if (subject.data.hidden_at) continue
+  const s = subject
+  if (s.data.characters) {
+    if (s.object === 'kanji')
+      WKKanjiMap.set(s.data.characters, s as WKObject<WKKanji>)
+    else if (s.object === 'vocab')
+      WKVocabMap.set(s.data.characters, s as WKObject<WKVocab>)
+    else if (s.object === 'radical')
+      WKRadicalMap.set(s.data.characters, s as WKObject<WKRadical>)
+    else WKKanaMap.set(s.data.characters, s as WKObject<WKKana>)
+  }
+  WKIdMap.set(s.id, s)
 }

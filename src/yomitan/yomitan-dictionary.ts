@@ -42,7 +42,7 @@ export default class YomitanDictionary {
     const indexPath = Path.join(path, 'index.json')
     await file(indexPath).write(JSON.stringify(this.index))
     for (const bank of BANKS) await this.saveBank(bank)
-    await $`7z a -tzip -mx=9 ../../dist/${this.index.title}.zip ./*`.cwd(path)
+    await $`zip -r -9 ../../dist/${this.index.title}.zip .`.cwd(path)
     await rename(indexPath, Path.join('dist', this.index.title + '.json'))
     // rmSync(path, {
     //   force: true,

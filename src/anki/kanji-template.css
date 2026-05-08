@@ -1,0 +1,94 @@
+@charset "UTF-8";
+@import '_ajt_japanese_25.11.12.1.css';
+
+* {
+  box-sizing: border-box;
+  font-family: NotoSansJP, sans-serif;
+}
+
+main,
+header,
+footer {
+  display: grid;
+  place-items: center;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+audio {
+  width: calc(100% - 16px);
+  margin: 8px;
+}
+
+@font-face {
+  font-family: NotoSansJP;
+  src: url('_NotoSansJP-Regular.otf');
+}
+
+@font-face {
+  font-family: KanjiStrokeOrders;
+  src: url('_kanji-stroke-orders.ttf');
+}
+
+.block {
+  position: relative;
+  margin: 8px;
+  border-radius: 8px;
+  background-color: #252525;
+  color: #fff;
+  font-size: 96px;
+  text-align: center;
+}
+
+.kanji {
+  font-family: KanjiStrokeOrders, NotoSansJP, sans-serif;
+}
+
+.frequency {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  color: #565656;
+  font-size: 12px;
+}
+
+.mode {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  color: #565656;
+  font-size: 12px;
+}
+
+.sub {
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.spoiler {
+  background-color: #fff;
+  color: transparent;
+}
+
+.spoiler:hover,
+.spoiler.shown {
+  background-color: transparent;
+  color: inherit;
+}
+
+.sub-block {
+  margin: 8px 0;
+  border-top: 1px solid #565656;
+  text-align: center;
+}
+
+.sub-block .title {
+  width: 100%;
+  font-size: 24px;
+}
+
+table {
+  margin: auto;
+}

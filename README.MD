@@ -1,6 +1,9 @@
 # Japanese
 
-It's just a tooling that I use to learn japanese.
+My Japanese language learning tools.
+
+- Browser extension JP Reader. Helps mining everythere, adds furigana.
+- Anki configs.
 
 ## Setup
 
@@ -70,9 +73,21 @@ It's just a tooling that I use to learn japanese.
       1. To retime subs press `z` or `shift + z`
       2. When watching video, subtitles are autimatically opened in Yomitan search
       3. Look up words you need and press green plus button to add note to anki
-      4. Immediately after addition press `g` __twice__
+      4. Immediately after addition press `g` **twice**
       5. Audio clipped audio will automatically play for you to check correct subs timing
 
 ## Yomitan dictionary
 
 It's a compilation of multiple yomitan dictionaries into one with embedded WaniKani mnemonics both for kanji and vocabulary.
+
+## Contribution
+
+1. Install Bun
+2. Download/update "assets/*"
+   1. [jitendex-yomitan](https://github.com/stephenmk/stephenmk.github.io/releases/latest/download/jitendex-yomitan.zip)
+   2. [KANJIDIC_english](https://github.com/yomidevs/jmdict-yomitan/releases/latest/download/KANJIDIC_english.zip)
+   3. [jpdb_frequency](https://github.com/toasted-nutbread/yomichan-bccwj-frequency-dictionary/releases/latest/download/BCCWJ-LUW.zip)
+   4. [kotu_pitch](https://kotu.io/yomitan/kotu_pitch.zip)
+3. Run anki + ankiconnect
+4. Set .env WK token
+5. Set .env JPDB cookies

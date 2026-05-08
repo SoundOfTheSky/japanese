@@ -1,8 +1,6 @@
 import { appendFile } from 'node:fs/promises'
 
-import { file } from 'bun'
-
-import { downloadWK, loadWKFile } from '../wanikani'
+import { loadJPDBFile } from '../jpdb'
 
 import { generateKanji } from './kanji'
 import { generateTerms } from './term'
@@ -17,7 +15,7 @@ const dictionary = new YomitanDictionary({
   indexUrl:
     'https://github.com/SoundOfTheSky/japanese/raw/refs/heads/main/dist/Sky.json',
   isUpdatable: true,
-  revision: '1.7.2-' + new Date().toISOString().split('T')[0],
+  revision: '1.8.0-' + new Date().toISOString().split('T')[0],
   sequenced: true,
   sourceLanguage: 'ja',
   targetLanguage: 'en',
@@ -27,16 +25,16 @@ const dictionary = new YomitanDictionary({
 })
 
 // === Download assets and merge ===
-if (!(await file('assets/WK.json').exists())) await downloadWK()
-dictionary.index.attribution += `\n\n=== WaniKani ===\nLink: https://www.wanikani.com\n© Tofugu LLC`
-await loadWKFile()
+dictionary.index.attribution += `\n\n=== WaniKani ===\nLink: https://www.wanikani.com\n© Tofugu LLC\n\n=== JPDB ===\nLink: https://jpdb.io\n`
+await loadJPDBFile()
 // https://github.com/stephenmk/stephenmk.github.io/releases/latest/download/jitendex-yomitan.zip
 await dictionary.merge('jitendex-yomitan')
 // https://github.com/yomidevs/jmdict-yomitan/releases/latest/download/KANJIDIC_english.zip
 await dictionary.merge('KANJIDIC_english')
 // https://github.com/toasted-nutbread/yomichan-bccwj-frequency-dictionary/releases/latest/download/BCCWJ-LUW.zip
-await dictionary.merge('BCCWJ-LUW')
-await dictionary.merge('アクセント辞典v2')
+await dictionary.merge('jpdb_frequency')
+// https://kotu.io/yomitan/kotu_pitch.zip
+await dictionary.merge('kotu_pitch')
 
 // === Add css ===
 await appendFile(
