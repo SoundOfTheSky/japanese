@@ -2,7 +2,9 @@ import { JPDBKanjiMap } from '../jpdb'
 import { KANJI_TEXTBOOK, KANJI_TEXTBOOK_MAP } from '../kanji-textbook'
 import { kanjidicMap } from '../kanjidic'
 import { getKanjiVG, KanjiVG } from '../kanjivg'
+import { cleanupHTML } from '../utilities'
 import {
+  cutUnnecessary,
   WKIdMap,
   WKKanjiMap,
   WKObject,
@@ -39,18 +41,37 @@ const notesMap = new Map(notes.map((x) => [x.fields.Kanji!.value, x]))
 
 const processed = new Map<string, NoteFields>()
 let size = 0
-function buildKanjiPartsTree(kvg: KanjiVG, includeInitial?: boolean) {
+function buildKVGPartsTree(
+  kanji: string,
+  source: KanjiVG | 'wk' | 'jpdb',
+  includeInitial?: boolean,
+) {
   let text = ''
+  const note = processed.get(kanji)
+  const wkKanji = source === 'wk' && getWKKanjiComposed(kanji)
+  const jpdb = source === 'jpdb' && JPDBKanjiMap.get(kanji)?.composed
+  const childFree =
+    (source === 'wk' && !wkKanji) ||
+    (source === 'jpdb' && !jpdb) ||
+    (typeof source === 'object' && source.children.length === 0)
   if (includeInitial) {
-    text += kvg.element
-    if (kvg.original) text += ` [${kvg.original}]`
-    const note = processed.get(kvg.element)
+    text += kanji
+    if (typeof source === 'object' && source.original)
+      text += ` [${source.original}]`
     if (note) text += ` - ${note.Meaning}`
-  } else if (kvg.children.length === 0) return ''
-  if (kvg.children.length !== 0) {
+  } else if (childFree) return ''
+
+  if (!childFree) {
     text += '<ul>'
-    for (const child of kvg.children)
-      text += `<li>${buildKanjiPartsTree(child, true)}</li>`
+    if (wkKanji)
+      for (const child of wkKanji)
+        text += `<li>${buildKVGPartsTree(child, 'wk', true)}</li>`
+    else if (jpdb)
+      for (const child of jpdb)
+        text += `<li>${buildKVGPartsTree(child, 'jpdb', true)}</li>`
+    else
+      for (const child of (source as KanjiVG).children)
+        text += `<li>${buildKVGPartsTree(child.element, child, true)}</li>`
     text += '</ul>'
   }
   return text
@@ -92,22 +113,26 @@ async function processKanji(kanji: string) {
   const noteFields: NoteFields = {
     Kanji: kanji,
     Parts: '',
-    PartsWK:
-      wkKanji?.data.component_subject_ids
-        .map(
-          (x) =>
-            (WKIdMap.get(x) as WKObject<WKRadical> | undefined)?.data
-              .characters,
-        )
-        .filter((x) => x && x !== kanji)
-        .join('') ?? '',
-    PartsJPDB: jpdb?.composed ?? '',
+    PartsWK: '',
+    PartsJPDB: '',
     Meaning: [...new Set(meanings.map((x) => x.toLowerCase().trim()))].join(
       '; ',
     ),
-    Mnemonic: '',
-    MnemonicWK:
-      wkRadical?.data.meaning_mnemonic ?? wkKanji?.data.meaning_mnemonic ?? '',
+    Mnemonic: note?.fields.Mnemonic?.value ?? '',
+    MnemonicWK: (
+      cleanupHTML(cutUnnecessary(wkRadical?.data.meaning_mnemonic ?? '')) ||
+      cleanupHTML(cutUnnecessary(wkKanji?.data.meaning_mnemonic ?? ''))
+    )
+      .replaceAll('<radical>', '<span class="wk-radical">')
+      .replaceAll('</radical>', '</span>')
+      .replaceAll('<kanji>', '<span class="wk-kanji">')
+      .replaceAll('</kanji>', '</span>')
+      .replaceAll('<vocabulary>', '<span class="wk-vocabulary">')
+      .replaceAll('</vocabulary>', '</span>')
+      .replaceAll('<meaning>', '<span class="wk-meaning">')
+      .replaceAll('</meaning>', '</span>')
+      .replaceAll('<reading>', '<span class="wk-reading">')
+      .replaceAll('</reading>', '</span>'),
     MnemonicJPDB: jpdb?.mnemonic ?? '',
     Vocab: textbook
       ? `<table><tbody>${textbook.vocabulary
@@ -125,13 +150,16 @@ async function processKanji(kanji: string) {
   processed.set(kanji, noteFields)
   // Add all children
   const kvg = await getKanjiVG(kanji)
-  console.log(size, kanji)
+  console.log(note ? 'Updating' : 'Creating', size, kanji)
   if (kvg) {
     for (const children of kvg.children) await processKanji(children.element)
-    noteFields.Parts = buildKanjiPartsTree(kvg)
+    noteFields.Parts = buildKVGPartsTree(kanji, kvg)
   }
-  for (const char of noteFields.PartsJPDB) await processKanji(char)
-  for (const char of noteFields.PartsWK) await processKanji(char)
+  for (const char of JPDBKanjiMap.get(kanji)?.composed ?? '')
+    await processKanji(char)
+  noteFields.PartsJPDB = buildKVGPartsTree(kanji, 'jpdb')
+  for (const char of getWKKanjiComposed(kanji)) await processKanji(char)
+  noteFields.PartsWK = buildKVGPartsTree(kanji, 'wk')
   noteFields.Order = size.toString()
   size++
   if (note) await ankiUpdateNoteFields(note.noteId, noteFields)
@@ -141,4 +169,16 @@ async function processKanji(kanji: string) {
 for (let index = 0; index < KANJI_TEXTBOOK.length; index++) {
   console.log(`${index}/${KANJI_TEXTBOOK.length}`)
   await processKanji(KANJI_TEXTBOOK[index]!.kanji)
+}
+
+function getWKKanjiComposed(kanji: string) {
+  return (
+    WKKanjiMap.get(kanji)
+      ?.data.component_subject_ids.map(
+        (x) =>
+          (WKIdMap.get(x) as WKObject<WKRadical> | undefined)?.data.characters,
+      )
+      .filter((x) => x && x !== kanji)
+      .join('') ?? ''
+  )
 }

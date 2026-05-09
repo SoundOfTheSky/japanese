@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@import '_ajt_japanese_25.11.12.1.css';
 
 * {
   box-sizing: border-box;
@@ -91,4 +90,29 @@ audio {
 
 table {
   margin: auto;
+}
+
+.wk-radical {
+  border-radius: 4px;
+  background-color: #0af;
+}
+
+.wk-kanji {
+  border-radius: 4px;
+  background-color: #f0a;
+}
+
+.wk-vocabulary {
+  border-radius: 4px;
+  background-color: #a0f;
+}
+
+.wk-reading {
+  border-radius: 4px;
+  background-color: #f0a;
+}
+
+.wk-meaning {
+  border-radius: 4px;
+  background-color: #0af;
 }

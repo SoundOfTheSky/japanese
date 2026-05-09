@@ -80,9 +80,10 @@
       }
     }
 
+    const $mode = document.querySelector('.mode');
     let mode = localStorage?.getItem("jp-kanji-mode") ?? "All";
     updateMode();
-    document.querySelector(".block").addEventListener("click", () => {
+    $mode.addEventListener("click", () => {
       if (mode === "WaniKani") mode = "JPDB";
       else if (mode === "JPDB") mode = "Custom";
       else if (mode === "Custom") mode = "All";
@@ -92,7 +93,7 @@
     });
 
     function updateMode() {
-      document.querySelector(".mode").textContent = mode;
+      $mode.textContent = mode;
       const $wks = document.querySelectorAll(".wk");
       const $jpdbs = document.querySelectorAll(".jpdb");
       const $common = document.querySelectorAll(".common");
