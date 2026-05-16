@@ -2,7 +2,6 @@ const punctuation = new Set(['.', ':', '!', '?', ';'])
 export function removeWholeSentenceWithSubstring(
   text: string,
   substring: string,
-  // removed = new Set<string>(),
 ) {
   while (true) {
     let left = text.indexOf(substring) - 1
@@ -10,7 +9,6 @@ export function removeWholeSentenceWithSubstring(
     let right = left + substring.length
     while (left !== -1 && !punctuation.has(text[left]!)) left--
     while (right !== text.length && !punctuation.has(text[right]!)) right++
-    // removed.add(text.slice(left + 1, right + 1))
     text = (text.slice(0, left + 1) + text.slice(right + 1)).trim()
   }
 }

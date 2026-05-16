@@ -37,6 +37,13 @@ const UNNECESSARY = [
   'い on the end',
 ]
 
+const USE_OTHER_VARIANT = [
+  'anji is the same as the',
+  'adical is the same as the kanji',
+  'adical are the same',
+  'anji are the same',
+]
+
 export type WKResponse<T> = {
   object: string
   url: string
@@ -170,6 +177,14 @@ export async function downloadWK() {
   }
   await write('assets/WK.json', JSON.stringify(subjects, undefined, 2))
   WK.splice(0, Infinity, ...subjects)
+}
+
+export function getKanjiMnemonic(kanji: string) {
+  const wkKanji = WKKanjiMap.get(kanji)?.data.meaning_mnemonic ?? ''
+  const wkKanjiCut = cutUnnecessary(wkKanji)
+  if (wkKanjiCut && !USE_OTHER_VARIANT.some((x) => wkKanji.includes(x)))
+    return wkKanjiCut
+  return WKRadicalMap.get(kanji)?.data.meaning_mnemonic
 }
 
 try {

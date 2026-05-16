@@ -1,5 +1,6 @@
 import { extractKanji } from '../utilities'
 import {
+  getKanjiMnemonic,
   WK,
   WKIdMap,
   WKKanji,
@@ -90,9 +91,7 @@ export function generateKanji(dictionary: YomitanDictionary) {
           ...item[4],
         ].map((x) => x.toLowerCase()),
       ),
-      clearWKText(
-        `WaniKani Meaning:\n${wkRadical && !wkRadical.data.meaning_mnemonic.includes('radical is the same') ? wkRadical.data.meaning_mnemonic : wkKanji!.data.meaning_mnemonic}`,
-      ),
+      clearWKText(`WaniKani Meaning:\n${getKanjiMnemonic(item[0])}`),
     ]
     if (wkKanji)
       item[4].push(

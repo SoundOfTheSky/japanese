@@ -66,6 +66,7 @@ export function generateTerms(dictionary: YomitanDictionary) {
     }
   }
 }
+
 function WKToStructure(
   type: string,
   title: string,

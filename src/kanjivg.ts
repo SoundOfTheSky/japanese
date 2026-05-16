@@ -21,8 +21,7 @@ export type KanjiVGStroke = {
 
 export type KanjiVG = {
   id?: string
-
-  element: string
+  element?: string
   original?: string
   phon?: string
 
@@ -30,13 +29,10 @@ export type KanjiVG = {
   variant?: boolean
   radicalForm?: boolean
   tradForm?: boolean
-
   number?: number
   part?: number
-
   radical?: string
   position?: KanjiVGPositionEnum
-
   children: KanjiVG[]
   strokes: KanjiVGStroke[]
 }

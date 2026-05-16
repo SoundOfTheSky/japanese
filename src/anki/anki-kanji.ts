@@ -2,9 +2,8 @@ import { JPDBKanjiMap } from '../jpdb'
 import { KANJI_TEXTBOOK, KANJI_TEXTBOOK_MAP } from '../kanji-textbook'
 import { kanjidicMap } from '../kanjidic'
 import { getKanjiVG, KanjiVG } from '../kanjivg'
-import { cleanupHTML } from '../utilities'
 import {
-  cutUnnecessary,
+  getKanjiMnemonic,
   WKIdMap,
   WKKanjiMap,
   WKObject,
@@ -14,6 +13,7 @@ import {
 
 import {
   ankiAddNote,
+  ankiDeleteNotes,
   ankiFindNotes,
   ankiNotesInfo,
   ankiUpdateNoteFields,
@@ -31,6 +31,7 @@ type NoteFields = {
   Onyomi: string
   Mnemonic: string
   MnemonicWK: string
+  MnemonicReadingWK: string
   MnemonicJPDB: string
   Order: string
 }
@@ -38,6 +39,7 @@ type NoteFields = {
 const noteIds = await ankiFindNotes('"note:JP Kanji"')
 const notes = await ankiNotesInfo(noteIds)
 const notesMap = new Map(notes.map((x) => [x.fields.Kanji!.value, x]))
+const leftNotesSet = new Set(notesMap.keys())
 
 const processed = new Map<string, NoteFields>()
 let size = 0
@@ -50,10 +52,12 @@ function buildKVGPartsTree(
   const note = processed.get(kanji)
   const wkKanji = source === 'wk' && getWKKanjiComposed(kanji)
   const jpdb = source === 'jpdb' && JPDBKanjiMap.get(kanji)?.composed
+  const kvgChildren =
+    typeof source === 'object' ? source.children.filter((x) => x.element) : []
   const childFree =
     (source === 'wk' && !wkKanji) ||
     (source === 'jpdb' && !jpdb) ||
-    (typeof source === 'object' && source.children.length === 0)
+    (typeof source === 'object' && kvgChildren.length === 0)
   if (includeInitial) {
     text += kanji
     if (typeof source === 'object' && source.original)
@@ -70,8 +74,8 @@ function buildKVGPartsTree(
       for (const child of jpdb)
         text += `<li>${buildKVGPartsTree(child, 'jpdb', true)}</li>`
     else
-      for (const child of (source as KanjiVG).children)
-        text += `<li>${buildKVGPartsTree(child.element, child, true)}</li>`
+      for (const child of kvgChildren)
+        text += `<li>${buildKVGPartsTree(child.element!, child, true)}</li>`
     text += '</ul>'
   }
   return text
@@ -79,6 +83,7 @@ function buildKVGPartsTree(
 
 async function processKanji(kanji: string) {
   if (!kanji || processed.has(kanji)) return // Stop infinite cycle
+  leftNotesSet.delete(kanji)
   const note = notesMap.get(kanji)
   const textbook = KANJI_TEXTBOOK_MAP.get(kanji)
   const kanjidic = kanjidicMap.get(kanji)
@@ -119,20 +124,8 @@ async function processKanji(kanji: string) {
       '; ',
     ),
     Mnemonic: note?.fields.Mnemonic?.value ?? '',
-    MnemonicWK: (
-      cleanupHTML(cutUnnecessary(wkRadical?.data.meaning_mnemonic ?? '')) ||
-      cleanupHTML(cutUnnecessary(wkKanji?.data.meaning_mnemonic ?? ''))
-    )
-      .replaceAll('<radical>', '<span class="wk-radical">')
-      .replaceAll('</radical>', '</span>')
-      .replaceAll('<kanji>', '<span class="wk-kanji">')
-      .replaceAll('</kanji>', '</span>')
-      .replaceAll('<vocabulary>', '<span class="wk-vocabulary">')
-      .replaceAll('</vocabulary>', '</span>')
-      .replaceAll('<meaning>', '<span class="wk-meaning">')
-      .replaceAll('</meaning>', '</span>')
-      .replaceAll('<reading>', '<span class="wk-reading">')
-      .replaceAll('</reading>', '</span>'),
+    MnemonicWK: processWKText(getKanjiMnemonic(kanji) ?? ''),
+    MnemonicReadingWK: processWKText(wkKanji?.data.reading_mnemonic ?? ''),
     MnemonicJPDB: jpdb?.mnemonic ?? '',
     Vocab: textbook
       ? `<table><tbody>${textbook.vocabulary
@@ -152,7 +145,8 @@ async function processKanji(kanji: string) {
   const kvg = await getKanjiVG(kanji)
   console.log(note ? 'Updating' : 'Creating', size, kanji)
   if (kvg) {
-    for (const children of kvg.children) await processKanji(children.element)
+    for (const children of kvg.children)
+      if (children.element) await processKanji(children.element)
     noteFields.Parts = buildKVGPartsTree(kanji, kvg)
   }
   for (const char of JPDBKanjiMap.get(kanji)?.composed ?? '')
@@ -170,6 +164,12 @@ for (let index = 0; index < KANJI_TEXTBOOK.length; index++) {
   console.log(`${index}/${KANJI_TEXTBOOK.length}`)
   await processKanji(KANJI_TEXTBOOK[index]!.kanji)
 }
+const notesToDelete = [...leftNotesSet]
+  .map((x) => notesMap.get(x))
+  .filter(Boolean)
+  .map((x) => x!.noteId)
+console.log('Deleting', notesToDelete)
+if (notesToDelete.length !== 0) await ankiDeleteNotes(notesToDelete)
 
 function getWKKanjiComposed(kanji: string) {
   return (
@@ -181,4 +181,18 @@ function getWKKanjiComposed(kanji: string) {
       .filter((x) => x && x !== kanji)
       .join('') ?? ''
   )
+}
+
+function processWKText(text: string) {
+  return text
+    .replaceAll('<radical>', '<span class="wk-radical">')
+    .replaceAll('</radical>', '</span>')
+    .replaceAll('<kanji>', '<span class="wk-kanji">')
+    .replaceAll('</kanji>', '</span>')
+    .replaceAll('<vocabulary>', '<span class="wk-vocabulary">')
+    .replaceAll('</vocabulary>', '</span>')
+    .replaceAll('<meaning>', '<span class="wk-meaning">')
+    .replaceAll('</meaning>', '</span>')
+    .replaceAll('<reading>', '<span class="wk-reading">')
+    .replaceAll('</reading>', '</span>')
 }
