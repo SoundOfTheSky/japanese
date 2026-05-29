@@ -55,9 +55,7 @@ for (const target of targets) {
         `chrome.runtime.getURL("assets/lindera_wasm_bg.wasm")`,
       ),
   )
-  if (target === 'firefox') {
-    await $`cd ${outdir} && zip -qr ../../firefox.xpi .`
-  }
+  if (target === 'firefox') await $`cd ${outdir} && zip -qr ../../firefox.xpi .`
   // else
   //   await $`cd ${outdir} && /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --pack-extension=. --pack-extension-key="../../chrome.pem"`
 }

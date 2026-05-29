@@ -45,7 +45,6 @@ const ankiIntervals = new Map<string, number>()
 const ankiKanjiIntervals = new Map<string, number>()
 const pitch = new Map<string, number>()
 const ankiSemaphore = new Semaphore(1)
-const encoder = new TextEncoder()
 let lastAnkiIntervalsUpdate = 0
 let ankiAvailable = false
 let ankiKanjiAvailable = false
@@ -75,24 +74,30 @@ async function getKanjiIntervals() {
   if (ankiKanjiAvailable) return ankiKanjiIntervals
 }
 
+function utf8Length(code: number): number {
+  if (code <= 0x7f) return 1
+  if (code <= 0x7ff) return 2
+  if (code <= 0xffff) return 3
+  return 4
+}
+
 /** Run tokenizer */
 async function tokenize(text: string): Promise<TokenizeResult[]> {
   await updateAnkiIntervals()
 
-  // It's insane how bad it is. I need to find a better way. Easily eats a few megabytes of memory for long texts.
-  const byteToIndexMap: number[] = []
-  let byteOffset = 0
-  for (let index = 0; index < text.length; index++) {
-    const bytes = encoder.encode(text[index]).length
-    for (let i = 0; i < bytes; i++) byteToIndexMap[byteOffset + i] = index
-    byteOffset += bytes
-  }
+  let byteIndex = 0
+  let charIndex = 0
 
   return tokenizer.tokenize(text).map((token) => {
+    while (byteIndex < token.byte_start) {
+      const code = text.codePointAt(charIndex)!
+      byteIndex += utf8Length(code)
+      charIndex += code > 0xffff ? 2 : 1
+    }
     const tokenSurface = token.surface
     const result: TokenizeResult = {
       text: tokenSurface,
-      position: byteToIndexMap[token.byte_start]!,
+      position: charIndex,
     }
     const tokenBaseForm = token.details[DICT_DETAILS_BASE_FORM]!
     /**
@@ -279,7 +284,7 @@ async function initializeStorage() {
     ankiQuery: '"note:JP Vocab"',
     ankiUrl: 'http://127.0.0.1:8765',
     enabled: true,
-    furigana: FuriganaMode.HIRAGANA,
+    furigana: FuriganaMode.NONE,
   }
   storage = await chrome.storage.sync.get<SyncStorage>()
   for (const key in DEFAULT_DATA)

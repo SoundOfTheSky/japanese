@@ -38,10 +38,10 @@ const UNNECESSARY = [
 ]
 
 const USE_OTHER_VARIANT = [
-  'anji is the same as the',
-  'adical is the same as the kanji',
   'adical are the same',
   'anji are the same',
+  'means the same ',
+  'the same as the',
 ]
 
 export type WKResponse<T> = {

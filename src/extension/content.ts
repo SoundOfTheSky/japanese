@@ -1,6 +1,11 @@
 import { wait } from '@softsky/utils'
 
-import { getKanjiIntervals, SyncStorage, tokenize } from './shared'
+import {
+  FuriganaMode,
+  getKanjiIntervals,
+  SyncStorage,
+  tokenize,
+} from './shared'
 
 const IGNORED_TEXT = new Set(
   '。.、,「」[]『』・？?！!（）()【】ー-—…０１２３４５６７８９',
@@ -18,6 +23,7 @@ const IGNORED_TAGS = new Set([
 ])
 const annotateQueue = new Set<Node>()
 let annotating = false
+let isEven = true
 // Wait for load
 void Promise.all([
   // Page load
@@ -43,11 +49,11 @@ void Promise.all([
 
 // CSS + highlights
 const HIGHLIGHTS = [
-  ['gray', 21, new Highlight()],
-  ['aqua', 7, new Highlight()],
-  ['lawngreen', 1, new Highlight()],
-  ['gold', 0, new Highlight()],
-  ['red', -Infinity, new Highlight()],
+  ['gray', 60, new Highlight(), new Highlight(), new Highlight()],
+  ['aqua', 21, new Highlight(), new Highlight(), new Highlight()],
+  ['lawngreen', 7, new Highlight(), new Highlight(), new Highlight()],
+  ['gold', 0, new Highlight(), new Highlight(), new Highlight()],
+  ['red', -Infinity, new Highlight(), new Highlight(), new Highlight()],
 ] as const
 injectCSS()
 
@@ -76,10 +82,34 @@ function injectCSS() {
 
 ::highlight(${JPREADER}-${name}) {
   color: ${name};
-}`,
+}
+
+::highlight(${JPREADER}-${name}-underline-even) {
+  text-decoration: ${name} underline;
+}
+
+::highlight(${JPREADER}-${name}-underline-odd) {
+  text-decoration: ${name} wavy underline;
+}
+  `,
   ).join('\n')
-  for (const [name, , highlight] of HIGHLIGHTS)
+  for (const [
+    name,
+    ,
+    highlight,
+    highlightUnderlineEven,
+    highlightUnderlineOdd,
+  ] of HIGHLIGHTS) {
     CSS.highlights.set(`${JPREADER}-${name}`, highlight)
+    CSS.highlights.set(
+      `${JPREADER}-${name}-underline-even`,
+      highlightUnderlineEven,
+    )
+    CSS.highlights.set(
+      `${JPREADER}-${name}-underline-odd`,
+      highlightUnderlineOdd,
+    )
+  }
   document.head.appendChild(style)
 }
 
@@ -104,38 +134,8 @@ async function annotate(nextRoot: Node) {
   if (annotating) return
   annotating = true
   for (const root of annotateQueue) {
-    // annotateQueue.delete(root)
     try {
-      const parent = root.parentElement
-      if (
-        // Ignore without parent
-        !parent ||
-        // Not in DOM for some reason
-        !parent.isConnected ||
-        // If parent is JPREADER
-        parent.classList.contains(JPREADER) ||
-        // If Text node
-        (root.nodeType === 3
-          ? // No value
-            !root.nodeValue ||
-            // Parent ignored
-            IGNORED_TAGS.has(parent.tagName) ||
-            // Next sibling is JPREADER (caused by splitting nodes)
-            (
-              root.previousSibling as { classList?: DOMTokenList } | undefined
-            )?.classList?.contains(JPREADER) ||
-            // Previous sibling is JPREADER (caused by splitting nodes)
-            (
-              root.nextSibling as { classList?: DOMTokenList } | undefined
-            )?.classList?.contains(JPREADER)
-          : // If HTMLElement
-            root.nodeType !== 1 ||
-            // If JPREADER
-            (root as HTMLElement).classList.contains(JPREADER) ||
-            // If ignored
-            IGNORED_TAGS.has((root as HTMLElement).tagName))
-      )
-        continue
+      if (isIgnored(root)) continue
       // console.log('Annotate', root)
       // Remove all existing annotations to avoid duplication
       removeAnnotations(root)
@@ -159,44 +159,60 @@ async function annotate(nextRoot: Node) {
           try {
             const token = tokens[index]!
             if (!isJapanese(token.text)) continue
-            const isNotAlreadyRuby =
-              parent.tagName !== 'RUBY' && parent.tagName !== 'RB'
-            const isWholeRuby =
-              isNotAlreadyRuby &&
-              token.furigana?.start === 0 &&
-              token.furigana.end === token.text.length
-            const wrapper = document.createElement(
-              isWholeRuby ? 'ruby' : 'span',
-            )
-            if (token.interval === undefined) wrapper.className = JPREADER
-            // Apply interval
-            else
-              for (let index = 0; index < HIGHLIGHTS.length; index++) {
-                const x = HIGHLIGHTS[index]!
-                if (x[1] <= token.interval) {
-                  wrapper.classList = `${JPREADER} ${JPREADER}-${x[0]}`
-                  break
+            // Run optimized highliter if no furigana
+            if (storage.furigana === FuriganaMode.NONE) {
+              if (token.interval !== undefined)
+                for (let index = 0; index < HIGHLIGHTS.length; index++) {
+                  const x = HIGHLIGHTS[index]!
+                  if (x[1] <= token.interval) {
+                    const range = new Range()
+                    range.setStart(node, token.position)
+                    range.setEnd(node, token.position + token.text.length)
+                    x[isEven ? 3 : 4].add(range)
+                    isEven = !isEven
+                    break
+                  }
                 }
-              }
+            } else {
+              const isNotAlreadyRuby =
+                parent.tagName !== 'RUBY' && parent.tagName !== 'RB'
+              const isWholeRuby =
+                isNotAlreadyRuby &&
+                token.furigana?.start === 0 &&
+                token.furigana.end === token.text.length
+              const wrapper = document.createElement(
+                isWholeRuby ? 'ruby' : 'span',
+              )
+              if (token.interval === undefined) wrapper.className = JPREADER
+              // Apply interval
+              else
+                for (let index = 0; index < HIGHLIGHTS.length; index++) {
+                  const x = HIGHLIGHTS[index]!
+                  if (x[1] <= token.interval) {
+                    wrapper.classList = `${JPREADER} ${JPREADER}-${x[0]}`
+                    break
+                  }
+                }
 
-            const range = new Range()
-            range.setStart(node, token.position)
-            range.setEnd(node, token.position + token.text.length)
-            range.surroundContents(wrapper)
+              const range = new Range()
+              range.setStart(node, token.position)
+              range.setEnd(node, token.position + token.text.length)
+              range.surroundContents(wrapper)
 
-            // Apply furigana inside wrapper
-            if (token.furigana && isNotAlreadyRuby) {
-              const rt = document.createElement('rt')
-              rt.textContent = token.furigana.text
-              if (isWholeRuby) wrapper.appendChild(rt)
-              else {
-                const ruby = document.createElement('ruby')
-                const range = document.createRange()
-                const node = wrapper.childNodes[0]!
-                range.setStart(node, token.furigana.start)
-                range.setEnd(node, token.furigana.end)
-                range.surroundContents(ruby)
-                ruby.appendChild(rt)
+              // Apply furigana inside wrapper
+              if (token.furigana && isNotAlreadyRuby) {
+                const rt = document.createElement('rt')
+                rt.textContent = token.furigana.text
+                if (isWholeRuby) wrapper.appendChild(rt)
+                else {
+                  const ruby = document.createElement('ruby')
+                  const range = document.createRange()
+                  const node = wrapper.childNodes[0]!
+                  range.setStart(node, token.furigana.start)
+                  range.setEnd(node, token.furigana.end)
+                  range.surroundContents(ruby)
+                  ruby.appendChild(rt)
+                }
               }
             }
           } catch {
@@ -273,4 +289,38 @@ function isJapanese(text: string) {
     if (charCode > 12288 && charCode < 40960) return true
   }
   return false
+}
+
+function isIgnored(root: Node) {
+  const parent = root.parentElement
+  return (
+    // Ignore without parent
+    !parent ||
+    // Not in DOM for some reason
+    !parent.isConnected ||
+    // If parent is JPREADER
+    parent.classList.contains(JPREADER) ||
+    // If Text node
+    (root.nodeType === 3
+      ? // No value
+        !root.nodeValue ||
+        // Parent ignored
+        IGNORED_TAGS.has(parent.tagName) ||
+        // Next sibling is JPREADER (caused by splitting nodes)
+        (
+          root.previousSibling as { classList?: DOMTokenList } | undefined
+        )?.classList
+          // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+          ?.contains(JPREADER) ||
+        // Previous sibling is JPREADER (caused by splitting nodes)
+        (
+          root.nextSibling as { classList?: DOMTokenList } | undefined
+        )?.classList?.contains(JPREADER)
+      : // If HTMLElement
+        root.nodeType !== 1 ||
+        // If JPREADER
+        (root as HTMLElement).classList.contains(JPREADER) ||
+        // If ignored
+        IGNORED_TAGS.has((root as HTMLElement).tagName))
+  )
 }

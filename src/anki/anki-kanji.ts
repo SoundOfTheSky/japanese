@@ -1,7 +1,7 @@
 import { JPDBKanjiMap } from '../jpdb'
 import { KANJI_TEXTBOOK, KANJI_TEXTBOOK_MAP } from '../kanji-textbook'
 import { kanjidicMap } from '../kanjidic'
-import { getKanjiVG, KanjiVG } from '../kanjivg'
+import { KanjiVG } from '../kanjivg'
 import {
   getKanjiMnemonic,
   WKIdMap,
@@ -21,7 +21,6 @@ import {
 
 type NoteFields = {
   Kanji: string
-  Parts: string
   PartsWK: string
   PartsJPDB: string
   Meaning: string
@@ -35,6 +34,22 @@ type NoteFields = {
   MnemonicJPDB: string
   Order: string
 }
+
+const KANJI_CONVERT_SIMILAR = new Map<string, string>(
+  Object.entries({
+    礻: 'ネ',
+    衤: 'ネ',
+    飠: '食',
+    糹: '糸',
+    訁: '言',
+    釒: '金',
+    爫: '爪',
+    牜: '牛',
+  }),
+)
+const KANJI_CONVERT_SIMILAR_R = new Map(
+  KANJI_CONVERT_SIMILAR.entries().map((x) => [x[1], x[0]]),
+)
 
 const noteIds = await ankiFindNotes('"note:JP Kanji"')
 const notes = await ankiNotesInfo(noteIds)
@@ -89,7 +104,9 @@ async function processKanji(kanji: string) {
   const kanjidic = kanjidicMap.get(kanji)
   const wkKanji = WKKanjiMap.get(kanji)
   const wkRadical = WKRadicalMap.get(kanji)
-  const jpdb = JPDBKanjiMap.get(kanji)
+  const jpdb = KANJI_CONVERT_SIMILAR_R.has(kanji)
+    ? JPDBKanjiMap.get(KANJI_CONVERT_SIMILAR_R.get(kanji)!)
+    : JPDBKanjiMap.get(kanji)
 
   // Aggregate list of meanings from all sources
   const meanings: string[] = []
@@ -117,7 +134,6 @@ async function processKanji(kanji: string) {
 
   const noteFields: NoteFields = {
     Kanji: kanji,
-    Parts: '',
     PartsWK: '',
     PartsJPDB: '',
     Meaning: [...new Set(meanings.map((x) => x.toLowerCase().trim()))].join(
@@ -142,20 +158,20 @@ async function processKanji(kanji: string) {
   }
   processed.set(kanji, noteFields)
   // Add all children
-  const kvg = await getKanjiVG(kanji)
-  console.log(note ? 'Updating' : 'Creating', size, kanji)
-  if (kvg) {
-    for (const children of kvg.children)
-      if (children.element) await processKanji(children.element)
-    noteFields.Parts = buildKVGPartsTree(kanji, kvg)
-  }
+  // const kvg = await getKanjiVG(kanji)
+  // if (kvg) {
+  //   for (const children of kvg.children)
+  //     if (children.element) await processKanji(children.element)
+  //   noteFields.Parts = buildKVGPartsTree(kanji, kvg)
+  // }
   for (const char of JPDBKanjiMap.get(kanji)?.composed ?? '')
-    await processKanji(char)
+    await processKanji(KANJI_CONVERT_SIMILAR.get(char) ?? char)
   noteFields.PartsJPDB = buildKVGPartsTree(kanji, 'jpdb')
   for (const char of getWKKanjiComposed(kanji)) await processKanji(char)
   noteFields.PartsWK = buildKVGPartsTree(kanji, 'wk')
   noteFields.Order = size.toString()
   size++
+  console.log(note ? 'Updating' : 'Creating', size, kanji)
   if (note) await ankiUpdateNoteFields(note.noteId, noteFields)
   else await ankiAddNote('JP Kanji', 'JP Kanji', noteFields)
 }
