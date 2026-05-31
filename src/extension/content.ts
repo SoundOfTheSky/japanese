@@ -222,7 +222,6 @@ async function annotate(nextRoot: Node) {
       }
 
       // Annotate kanji + cleanup empty nodes
-      root.normalize()
       const kanjiIntervals = await getKanjiIntervals()
       if (kanjiIntervals) {
         let lastUpdate = Date.now()
@@ -268,17 +267,22 @@ async function annotate(nextRoot: Node) {
 /** Removes annotations. Except kanji ones... */
 function removeAnnotations(root: Node) {
   if (root.nodeType !== 1) return
-  const element = root as HTMLElement
-  const readers: HTMLElement[] = []
-  if (element.classList.contains(JPREADER)) readers.push(element)
-  for (const el of element.querySelectorAll<HTMLElement>('.' + JPREADER))
-    readers.push(el)
-  for (const reader of readers) {
-    const clone = reader.cloneNode(true) as HTMLElement
-    for (const rt of clone.querySelectorAll('rt, rp')) rt.remove()
-    reader.replaceWith(...clone.childNodes)
+  if (storage.furigana !== FuriganaMode.NONE) {
+    const element = root as HTMLElement
+    const readers: HTMLElement[] = []
+    if (element.classList.contains(JPREADER)) readers.push(element)
+    for (const el of element.querySelectorAll<HTMLElement>('.' + JPREADER))
+      readers.push(el)
+    for (const reader of readers) {
+      const clone = reader.cloneNode(true) as HTMLElement
+      for (const rt of clone.querySelectorAll('rt, rp')) rt.remove()
+      reader.replaceWith(...clone.childNodes)
+    }
+    // root.normalize() Removed cause break some websites that have different text nodes for reactivity
+    // We need either more subtle way of doing this just opt out.
+    // Opting out means for us that if we have to analyze same string many times
+    // Results may differ
   }
-  root.normalize()
 }
 
 /** Does text contain japanese */
