@@ -1,4 +1,4 @@
-import { checkConnection, storageSet, SyncStorage } from './shared'
+import { Dictionary, State, stateGet, storageGet, storageSet } from './shared'
 
 const $enabled = document.getElementById('enabled') as HTMLInputElement
 const $ankiInput = document.getElementById('anki-url') as HTMLInputElement
@@ -18,9 +18,13 @@ const $ankiEnabled = document.getElementById('anki-enabled') as HTMLInputElement
 const $ankiKanjiEnabled = document.getElementById(
   'anki-kanji-enabled',
 ) as HTMLInputElement
-const $ankiConnectStatus = document.getElementById('anki-connect-status')!
 const $furiganaField = document.getElementById('furigana') as HTMLSelectElement
-
+const $dictionaryField = document.getElementById(
+  'dictionary',
+) as HTMLSelectElement
+const $dictionaryStatus = document.getElementById('dictionary-status')!
+const $ankiVocabStatus = document.getElementById('anki-vocab-status')!
+const $ankiKanjiStatus = document.getElementById('anki-kanji-status')!
 for (const $input of [
   $ankiEnabled,
   $ankiExpressionFieldInput,
@@ -31,8 +35,30 @@ for (const $input of [
   $ankiQueryInput,
   $enabled,
   $furiganaField,
+  $dictionaryField,
 ])
   $input.addEventListener('change', update)
+
+const data = await storageGet()
+$ankiEnabled.checked = data.ankiEnabled
+$ankiExpressionFieldInput.value = data.ankiExpressionField
+$ankiInput.value = data.ankiUrl
+$ankiKanjiEnabled.checked = data.ankiKanjiEnabled
+$ankiKanjiFieldInput.value = data.ankiKanjiField
+$ankiKanjiQueryInput.value = data.ankiKanjiQuery
+$ankiQueryInput.value = data.ankiQuery
+$enabled.checked = data.enabled
+$furiganaField.value = data.furigana.toString()
+$dictionaryField.value = data.dictionary
+updateUI()
+stateUpdated(await stateGet())
+
+chrome.runtime.onMessage.addListener(
+  (message: { type: string; state: State }) => {
+    if (message.type === 'state') stateUpdated(message.state)
+    return true
+  },
+)
 
 async function update() {
   updateUI()
@@ -45,9 +71,9 @@ async function update() {
     ankiEnabled: $ankiEnabled.checked,
     ankiKanjiEnabled: $ankiKanjiEnabled.checked,
     furigana: +$furiganaField.value,
+    dictionary: $dictionaryField.value as Dictionary,
     enabled: $enabled.checked,
   })
-  await checkAnkiConnection()
 }
 
 function updateUI() {
@@ -71,27 +97,14 @@ function updateUI() {
       x.disabled = true
 }
 
-async function checkAnkiConnection() {
-  try {
-    $ankiConnectStatus.style.removeProperty('background-color')
-    $ankiConnectStatus.style.backgroundColor = (await checkConnection())
-      ? 'lawngreen'
-      : 'red'
-  } catch {
-    $ankiConnectStatus.style.backgroundColor = 'red'
-  }
+function stateUpdated(state: State) {
+  updateBulb($ankiVocabStatus, state.ankiVocabAvailable)
+  updateBulb($dictionaryStatus, state.isTokenizerReady)
+  updateBulb($ankiKanjiStatus, state.ankiKanjiAvailable)
 }
 
-const data = await chrome.storage.sync.get<SyncStorage>()
-
-$ankiEnabled.checked = data.ankiEnabled
-$ankiExpressionFieldInput.value = data.ankiExpressionField
-$ankiInput.value = data.ankiUrl
-$ankiKanjiEnabled.checked = data.ankiKanjiEnabled
-$ankiKanjiFieldInput.value = data.ankiKanjiField
-$ankiKanjiQueryInput.value = data.ankiKanjiQuery
-$ankiQueryInput.value = data.ankiQuery
-$enabled.checked = data.enabled
-$furiganaField.value = data.furigana.toString()
-void checkAnkiConnection()
-updateUI()
+function updateBulb($bulb: HTMLElement, status: boolean | null) {
+  $bulb.style.removeProperty('background-color')
+  if (status === null) return
+  $bulb.style.backgroundColor = status ? 'lawngreen' : 'red'
+}

@@ -2571,6 +2571,2083 @@ export const KANJI_TEXTBOOK: KanjiTextbookEntry[] = [
   },
 ]
 
+export const KANJI_TEXTBOOK2: KanjiTextbookEntry[] = [
+  // Lesson 1 (1–20)
+  {
+    kanji: '級',
+    meaning: ['grade'],
+    vocabulary: [
+      { jp: '中級[ちゅうきゅう]', en: 'intermediate (courses)' },
+      { jp: '上級[じょうきゅう]', en: 'advanced (courses)' },
+    ],
+  },
+  {
+    kanji: '予',
+    meaning: ['in advance'],
+    vocabulary: [{ jp: '予習[よしゅう]する', en: "to prepare one's lessons" }],
+  },
+  {
+    kanji: '定',
+    meaning: ['fix', 'regular', 'certain'],
+    vocabulary: [
+      { jp: '予定[よてい]', en: 'a plan, a schedule' },
+      { jp: '定規[じょうぎ]', en: 'a ruler' },
+    ],
+  },
+  {
+    kanji: '表',
+    meaning: ['express', 'surface', 'table'],
+    vocabulary: [
+      { jp: '表[ひょう]', en: 'a table' },
+      { jp: '表現[ひょうげん]', en: 'expression' },
+      { jp: '発表[はっぴょう]する', en: 'to make public, to announce' },
+      { jp: '表[おもて]', en: 'the face' },
+      { jp: '表[あらわ]す', en: 'to express' },
+    ],
+  },
+  {
+    kanji: '授',
+    meaning: ['confer'],
+    vocabulary: [
+      { jp: '授業[じゅぎょう]', en: 'a class, a lesson' },
+      { jp: '教授[きょうじゅ]', en: 'a professor' },
+    ],
+  },
+  {
+    kanji: '宿',
+    meaning: ['lodge'],
+    vocabulary: [
+      { jp: '宿題[しゅくだい]', en: 'homework' },
+      { jp: '宿[やど]', en: 'an inn, a hotel, a lodge' },
+    ],
+  },
+  {
+    kanji: '復',
+    meaning: ['return to'],
+    vocabulary: [
+      { jp: '復習[ふくしゅう]する', en: 'to review' },
+      { jp: '回復[かいふく]する', en: 'to recover' },
+    ],
+  },
+  {
+    kanji: '辞',
+    meaning: ['word', 'resign'],
+    vocabulary: [
+      { jp: '辞書[じしょ]', en: 'a dictionary' },
+      { jp: '辞[や]める', en: 'to resign' },
+    ],
+  },
+  {
+    kanji: '初',
+    meaning: ['first'],
+    vocabulary: [
+      { jp: '初級[しょきゅう]', en: 'basic (courses)' },
+      { jp: '初[はじ]めて', en: 'for the first time' },
+      { jp: '初[はじ]めに', en: 'at first' },
+    ],
+  },
+  {
+    kanji: '第',
+    meaning: ['ordinal number prefix'],
+    vocabulary: [{ jp: '第[だい]〜', en: 'ordinal number prefix' }],
+  },
+  {
+    kanji: '課',
+    meaning: ['section', 'lesson', 'impose'],
+    vocabulary: [
+      { jp: '課[か]', en: 'section, lesson' },
+      { jp: '課程[かてい]', en: 'a course, a program' },
+    ],
+  },
+  {
+    kanji: '練',
+    meaning: ['train'],
+    vocabulary: [{ jp: '練習[れんしゅう]する', en: 'to practice' }],
+  },
+  {
+    kanji: '科',
+    meaning: ['subject of study', 'scientific'],
+    vocabulary: [
+      { jp: '科学[かがく]', en: 'science' },
+      { jp: '教科書[きょうかしょ]', en: 'a textbook' },
+    ],
+  },
+  {
+    kanji: '参',
+    meaning: ['participate in', 'visit'],
+    vocabulary: [
+      { jp: '参加[さんか]する', en: 'to participate in' },
+      { jp: '参考書[さんこうしょ]', en: 'a reference' },
+      {
+        jp: '参[まい]る',
+        en: 'to go/to come (humble), to visit (a shrine, a temple etc.)',
+      },
+    ],
+  },
+  {
+    kanji: '忘',
+    meaning: ['forget'],
+    vocabulary: [
+      { jp: '忘[わす]れる', en: 'to forget' },
+      { jp: '忘[わす]れ物[もの]', en: 'a lost thing' },
+    ],
+  },
+  {
+    kanji: '覚',
+    meaning: ['perceive', 'memorize', 'awake'],
+    vocabulary: [
+      { jp: '感覚[かんかく]', en: 'a sense' },
+      { jp: '覚[おぼ]える', en: 'to remember, to memorize' },
+      { jp: '目[め]が覚[さ]める', en: 'to awake' },
+      { jp: '目[め]を覚[さ]ます', en: 'to wake up' },
+    ],
+  },
+  {
+    kanji: '組',
+    meaning: ['organize', 'assemble', 'a pair of', 'group'],
+    vocabulary: [
+      { jp: '組織[そしき]', en: 'organization' },
+      { jp: '組[くみ]', en: 'a pair, a set, a group' },
+      { jp: '番組[ばんぐみ]', en: 'a program' },
+      { jp: '組[く]む', en: 'to fold, to set' },
+      { jp: '組[く]み立[た]てる', en: 'to assemble' },
+    ],
+  },
+  {
+    kanji: '席',
+    meaning: ['seat'],
+    vocabulary: [
+      { jp: '席[せき]', en: 'a seat' },
+      { jp: '出席[しゅっせき]する', en: 'to attend' },
+    ],
+  },
+  {
+    kanji: '欠',
+    meaning: ['lack', 'absent'],
+    vocabulary: [
+      { jp: '欠席[けっせき]する', en: 'to be absent' },
+      { jp: '欠[か]ける', en: 'to lack' },
+    ],
+  },
+  {
+    kanji: '板',
+    meaning: ['board'],
+    vocabulary: [
+      { jp: '黒板[こくばん]', en: 'a blackboard' },
+      { jp: '板[いた]', en: 'board' },
+    ],
+  },
+
+  // Lesson 2 (21–40)
+  {
+    kanji: '解',
+    meaning: ['solve'],
+    vocabulary: [
+      { jp: '理解[りかい]する', en: 'to understand' },
+      { jp: '解答[かいとう]', en: 'an answer' },
+      { jp: '解決[かいけつ]する', en: 'to settle' },
+      { jp: '解[と]ける', en: 'to come out' },
+      { jp: '解[と]く', en: 'to answer, to solve' },
+    ],
+  },
+  {
+    kanji: '筆',
+    meaning: ['brush'],
+    vocabulary: [
+      { jp: '鉛筆[えんぴつ]', en: 'a pencil' },
+      { jp: '筆記試験[ひっきしけん]', en: 'a written examination' },
+      { jp: '筆[ふで]', en: 'a writing brush' },
+    ],
+  },
+  {
+    kanji: '違',
+    meaning: ['differ', 'violate'],
+    vocabulary: [
+      { jp: '違反[いはん]する', en: 'to violate' },
+      { jp: '違[ちが]う', en: 'to differ' },
+      { jp: '間違[まちが]う', en: 'to mistake' },
+    ],
+  },
+  {
+    kanji: '消',
+    meaning: ['extinguish', 'consume'],
+    vocabulary: [
+      { jp: '消毒[しょうどく]する', en: 'to disinfect, to sterilize' },
+      { jp: '消極的[しょうきょくてき]な', en: 'negative' },
+      { jp: '消[き]える', en: 'to go out, to fade' },
+      { jp: '消[け]す', en: 'to extinguish, to turn off' },
+      { jp: '消しゴム[けしゴム]', en: 'an eraser' },
+    ],
+  },
+  {
+    kanji: '次',
+    meaning: ['next', 'the second'],
+    vocabulary: [
+      { jp: '目次[もくじ]', en: 'a table of contents' },
+      { jp: '次第[しだい]に', en: 'gradually' },
+      { jp: '次[つ]ぐ', en: 'next to ...' },
+      { jp: '次[つぎ]', en: 'next, following' },
+    ],
+  },
+  {
+    kanji: '線',
+    meaning: ['line'],
+    vocabulary: [
+      { jp: '下線[かせん]', en: 'an underline' },
+      { jp: '〜線[せん]', en: '... Line' },
+    ],
+  },
+  {
+    kanji: '最',
+    meaning: ['the most ...'],
+    vocabulary: [
+      { jp: '最初[さいしょ]に', en: 'at first' },
+      { jp: '最近[さいきん]', en: 'recently' },
+      { jp: '最[もっと]も', en: 'most' },
+    ],
+  },
+  {
+    kanji: '適',
+    meaning: ['suitable'],
+    vocabulary: [{ jp: '適切[てきせつ]な', en: 'appropriate' }],
+  },
+  {
+    kanji: '当',
+    meaning: ['present', 'hit'],
+    vocabulary: [
+      { jp: '適当[てきとう]な', en: 'right, likely' },
+      { jp: '本当[ほんとう]の', en: 'true, real' },
+      { jp: '当[あ]たる', en: 'to hit' },
+      { jp: '当[あ]てる', en: 'to hit' },
+    ],
+  },
+  {
+    kanji: '選',
+    meaning: ['choose', 'select'],
+    vocabulary: [
+      { jp: '選手[せんしゅ]', en: 'a player' },
+      { jp: '選挙[せんきょ]', en: 'an election' },
+      { jp: '選[えら]ぶ', en: 'to choose' },
+    ],
+  },
+  {
+    kanji: '例',
+    meaning: ['example'],
+    vocabulary: [
+      { jp: '例[れい]', en: 'an example' },
+      { jp: '例[たと]えば', en: 'for example' },
+    ],
+  },
+  {
+    kanji: '形',
+    meaning: ['shape'],
+    vocabulary: [
+      { jp: '〜形[けい]', en: '...form' },
+      { jp: '形容詞[けいようし]', en: 'an adjective' },
+      { jp: '人形[にんぎょう]', en: 'a doll' },
+      { jp: '形[かたち]', en: 'shape' },
+    ],
+  },
+  {
+    kanji: '変',
+    meaning: ['change', 'strange', 'unusual'],
+    vocabulary: [
+      { jp: '変化[へんか]する', en: 'to change' },
+      { jp: '変[へん]な', en: 'strange, unusual' },
+      { jp: '変[か]わる', en: 'to change' },
+      { jp: '変[か]える', en: 'to change' },
+    ],
+  },
+  {
+    kanji: '式',
+    meaning: ['style', 'ceremony', 'formula'],
+    vocabulary: [
+      { jp: '式[しき]', en: 'style, ceremony, formula' },
+      { jp: '形式[けいしき]', en: 'a form' },
+    ],
+  },
+  {
+    kanji: '直',
+    meaning: ['straight', 'honest', 'direct', 'fix'],
+    vocabulary: [
+      { jp: '直通[ちょくつう]の', en: 'direct' },
+      { jp: '直角[ちょっかく]', en: 'a right angle' },
+      { jp: '正直[しょうじき]な', en: 'honest' },
+      { jp: '直[なお]る', en: 'to be mended, to be repaired' },
+      { jp: '直[なお]す', en: 'to mend, to repair' },
+      { jp: '直[ただ]ちに', en: 'at once' },
+    ],
+  },
+  {
+    kanji: '記',
+    meaning: ['write down'],
+    vocabulary: [
+      { jp: '日記[にっき]', en: 'a diary' },
+      { jp: '記入[きにゅう]する', en: 'to write, to fill in' },
+      { jp: '記号[きごう]', en: 'a mark, a sign' },
+    ],
+  },
+  {
+    kanji: '点',
+    meaning: ['point', 'score'],
+    vocabulary: [
+      { jp: '点[てん]', en: 'a point' },
+      { jp: '〜点[てん]', en: 'a mark of ...' },
+    ],
+  },
+  {
+    kanji: '机',
+    meaning: ['desk'],
+    vocabulary: [{ jp: '机[つくえ]', en: 'a desk' }],
+  },
+  {
+    kanji: '数',
+    meaning: ['number', 'count'],
+    vocabulary: [
+      { jp: '数字[すうじ]', en: 'number' },
+      { jp: '数学[すうがく]', en: 'mathematics' },
+      { jp: '数[かず]', en: 'number' },
+      { jp: '数[かぞ]える', en: 'to count' },
+    ],
+  },
+  {
+    kanji: '余',
+    meaning: ['excess'],
+    vocabulary: [
+      { jp: '余計[よけい]な', en: 'too many/much, unnecessary' },
+      { jp: '余分[よぶん]の', en: 'excessive, too many/much' },
+      { jp: '余裕[よゆう]', en: 'room, a margin' },
+      { jp: '余[あま]る', en: 'to be left over' },
+    ],
+  },
+
+  // Lesson 3 (41–60)
+  {
+    kanji: '速',
+    meaning: ['quick', 'fast'],
+    vocabulary: [
+      { jp: '速度[そくど]', en: 'speed' },
+      { jp: '高速[こうそく]', en: 'high speed' },
+      { jp: '速[はや]い', en: 'fast' },
+    ],
+  },
+  {
+    kanji: '遅',
+    meaning: ['slow', 'late'],
+    vocabulary: [
+      { jp: '遅刻[ちこく]する', en: 'to be late' },
+      { jp: '遅[おそ]い', en: 'late' },
+      { jp: '遅[おく]れる', en: 'to be late' },
+    ],
+  },
+  {
+    kanji: '易',
+    meaning: ['easy', 'exchange'],
+    vocabulary: [
+      { jp: '貿易[ぼうえき]', en: 'trade' },
+      { jp: '安易[あんい]な', en: 'easy, easygoing' },
+      { jp: '易[やさ]しい', en: 'easy' },
+    ],
+  },
+  {
+    kanji: '単',
+    meaning: ['single', 'simple', 'unit'],
+    vocabulary: [
+      { jp: '単語[たんご]', en: 'a word' },
+      { jp: '単数[たんすう]', en: 'singular' },
+    ],
+  },
+  {
+    kanji: '簡',
+    meaning: ['simple', 'brief'],
+    vocabulary: [{ jp: '簡単[かんたん]な', en: 'easy' }],
+  },
+  {
+    kanji: '難',
+    meaning: ['difficult', 'disaster'],
+    vocabulary: [
+      { jp: '困難[こんなん]な', en: 'difficult' },
+      { jp: '〜難[にく]い', en: 'hard to ..., difficult to ...' },
+      { jp: '難[むずか]しい', en: 'difficult' },
+    ],
+  },
+  {
+    kanji: '細',
+    meaning: ['slender', 'minute', 'detailed'],
+    vocabulary: [
+      { jp: '細[ほそ]い', en: 'thin' },
+      { jp: '細[こま]かい', en: 'small, fine, detailed' },
+    ],
+  },
+  {
+    kanji: '太',
+    meaning: ['thick', 'great'],
+    vocabulary: [
+      { jp: '太平洋[たいへいよう]', en: 'the Pacific Ocean' },
+      { jp: '太[ふと]い', en: 'thick' },
+      { jp: '太[ふと]る', en: 'to get fat' },
+    ],
+  },
+  {
+    kanji: '狭',
+    meaning: ['narrow'],
+    vocabulary: [{ jp: '狭[せま]い', en: 'narrow' }],
+  },
+  {
+    kanji: '浅',
+    meaning: ['shallow'],
+    vocabulary: [{ jp: '浅[あさ]い', en: 'shallow' }],
+  },
+  {
+    kanji: '深',
+    meaning: ['deep'],
+    vocabulary: [
+      { jp: '深夜[しんや]', en: 'midnight' },
+      { jp: '深[ふか]い', en: 'deep' },
+    ],
+  },
+  {
+    kanji: '静',
+    meaning: ['quiet', 'still'],
+    vocabulary: [
+      { jp: '冷静[れいせい]な', en: 'calm' },
+      { jp: '静[しず]かな', en: 'quiet' },
+    ],
+  },
+  {
+    kanji: '涼',
+    meaning: ['cool'],
+    vocabulary: [{ jp: '涼[すず]しい', en: 'cool' }],
+  },
+  {
+    kanji: '暖',
+    meaning: ['warm'],
+    vocabulary: [
+      { jp: '温暖[おんだん]な', en: 'warm, mild' },
+      { jp: '暖房[だんぼう]', en: 'heating' },
+      { jp: '暖[あたた]かい', en: 'warm' },
+    ],
+  },
+  {
+    kanji: '冷',
+    meaning: ['cold', 'cool'],
+    vocabulary: [
+      { jp: '冷房[れいぼう]', en: 'air conditioner' },
+      { jp: '冷[つめ]たい', en: 'cold' },
+      { jp: '冷[ひ]える', en: 'to get cold' },
+      { jp: '冷[ひ]やす', en: 'to cool, to chill' },
+      { jp: '冷[さ]める', en: 'to cool down' },
+      { jp: '冷[さ]ます', en: 'to cool' },
+    ],
+  },
+  {
+    kanji: '温',
+    meaning: ['warm'],
+    vocabulary: [
+      { jp: '温度[おんど]', en: 'temperature' },
+      { jp: '気温[きおん]', en: 'air temperature' },
+      { jp: '体温[たいおん]', en: 'body temperature' },
+      { jp: '温[あたた]かい', en: 'warm' },
+    ],
+  },
+  {
+    kanji: '熱',
+    meaning: ['heat', 'hot'],
+    vocabulary: [
+      { jp: '熱[ねつ]', en: 'heat, fever' },
+      { jp: '熱[あつ]い', en: 'hot' },
+    ],
+  },
+  {
+    kanji: '困',
+    meaning: ['be in trouble'],
+    vocabulary: [
+      { jp: '困難[こんなん]な', en: 'difficult' },
+      { jp: '困[こま]る', en: 'to be in trouble' },
+    ],
+  },
+  {
+    kanji: '球',
+    meaning: ['ball'],
+    vocabulary: [
+      { jp: '地球[ちきゅう]', en: 'the Earth' },
+      { jp: '球[たま]', en: 'a ball' },
+    ],
+  },
+  {
+    kanji: '化',
+    meaning: ['change into'],
+    vocabulary: [
+      { jp: '変化[へんか]する', en: 'to change' },
+      { jp: '文化[ぶんか]', en: 'culture' },
+      { jp: '化粧[けしょう]', en: 'makeup' },
+    ],
+  },
+
+  // Lesson 4 (61–80)
+  {
+    kanji: '馬',
+    meaning: ['horse'],
+    vocabulary: [
+      { jp: '乗馬[じょうば]', en: 'horse riding' },
+      { jp: '馬[うま]', en: 'a horse' },
+    ],
+  },
+  {
+    kanji: '象',
+    meaning: ['phenomenon', 'elephant'],
+    vocabulary: [
+      { jp: '気象[きしょう]', en: 'weather (conditions)' },
+      { jp: '現象[げんしょう]', en: 'a phenomenon' },
+      { jp: '象[ぞう]', en: 'an elephant' },
+    ],
+  },
+  {
+    kanji: '竹',
+    meaning: ['bamboo'],
+    vocabulary: [{ jp: '竹[たけ]', en: 'a bamboo' }],
+  },
+  {
+    kanji: '糸',
+    meaning: ['thread'],
+    vocabulary: [{ jp: '糸[いと]', en: '(a) thread' }],
+  },
+  {
+    kanji: '貝',
+    meaning: ['shellfish'],
+    vocabulary: [{ jp: '貝[かい]', en: 'a shellfish' }],
+  },
+  {
+    kanji: '毛',
+    meaning: ['hair'],
+    vocabulary: [
+      { jp: '羊毛[ようもう]', en: 'wool' },
+      { jp: '毛[け]', en: 'hair' },
+      { jp: '毛糸[けいと]', en: 'knitting wool' },
+    ],
+  },
+  {
+    kanji: '舟',
+    meaning: ['boat'],
+    vocabulary: [{ jp: '舟[ふね]', en: 'a boat' }],
+  },
+  {
+    kanji: '石',
+    meaning: ['stone'],
+    vocabulary: [
+      { jp: '石油[せきゆ]', en: 'petroleum' },
+      { jp: '石[いし]', en: 'a stone' },
+      { jp: '石けん[せっけん]', en: 'soap' },
+      { jp: '磁石[じしゃく]', en: 'a magnet' },
+    ],
+  },
+  {
+    kanji: '岩',
+    meaning: ['rock'],
+    vocabulary: [
+      { jp: '溶岩[ようがん]', en: 'lava' },
+      { jp: '岩[いわ]', en: 'a rock' },
+    ],
+  },
+  {
+    kanji: '畑',
+    meaning: ['field'],
+    vocabulary: [{ jp: '畑[はたけ]', en: 'a field' }],
+  },
+  {
+    kanji: '由',
+    meaning: ['cause', 'by way of ...'],
+    vocabulary: [
+      { jp: '経由[けいゆ]して', en: 'by way of, via' },
+      { jp: '理由[りゆう]', en: 'reason' },
+      { jp: '自由[じゆう]', en: 'freedom' },
+    ],
+  },
+  {
+    kanji: '油',
+    meaning: ['oil'],
+    vocabulary: [
+      { jp: '石油[せきゆ]', en: 'petroleum' },
+      { jp: 'しょう油[ゆ]', en: 'soy sauce' },
+      { jp: '油[あぶら]', en: 'oil' },
+    ],
+  },
+  {
+    kanji: '官',
+    meaning: ['government'],
+    vocabulary: [
+      { jp: '官庁[かんちょう]', en: 'a government office' },
+      { jp: '警官[けいかん]', en: 'a policeman' },
+    ],
+  },
+  {
+    kanji: '管',
+    meaning: ['pipe', 'control'],
+    vocabulary: [
+      { jp: '管理[かんり]する', en: 'to manage' },
+      { jp: '管[くだ]', en: 'pipe' },
+    ],
+  },
+  {
+    kanji: '島',
+    meaning: ['island'],
+    vocabulary: [
+      { jp: '半島[はんとう]', en: 'a peninsula' },
+      { jp: '島[しま]', en: 'an island' },
+    ],
+  },
+  {
+    kanji: '若',
+    meaning: ['young'],
+    vocabulary: [{ jp: '若[わか]い', en: 'young' }],
+  },
+  {
+    kanji: '苦',
+    meaning: ['suffering', 'bitter'],
+    vocabulary: [
+      { jp: '苦労[くろう]', en: 'trouble' },
+      { jp: '苦[くる]しい', en: 'suffering' },
+      { jp: '苦[にが]い', en: 'bitter' },
+      { jp: '苦手[にがて]な', en: 'poor, weak' },
+    ],
+  },
+  {
+    kanji: '向',
+    meaning: ['turn toward', 'the other side'],
+    vocabulary: [
+      { jp: '方向[ほうこう]', en: 'a direction' },
+      { jp: '向[む]く', en: 'to turn' },
+      { jp: '向[む]き', en: 'a direction' },
+      { jp: '向[む]ける', en: 'to turn' },
+      { jp: '向[む]かう', en: 'to face, to head' },
+      { jp: '向[む]かいの', en: 'opposite, across' },
+      { jp: '向[む]こう', en: 'beyond, over there' },
+    ],
+  },
+  {
+    kanji: '老',
+    meaning: ['old', 'old person'],
+    vocabulary: [{ jp: '老人[ろうじん]', en: 'the old' }],
+  },
+  {
+    kanji: '像',
+    meaning: ['image', 'statue'],
+    vocabulary: [
+      { jp: '像[ぞう]', en: 'a statue' },
+      { jp: '想像[そうぞう]する', en: 'to imagine' },
+    ],
+  },
+
+  // Lesson 5 (81–100)
+  {
+    kanji: '紹',
+    meaning: ['mediate'],
+    vocabulary: [{ jp: '紹介[しょうかい]する', en: 'to introduce' }],
+  },
+  {
+    kanji: '介',
+    meaning: ['mediate'],
+    vocabulary: [{ jp: '紹介[しょうかい]する', en: 'to introduce' }],
+  },
+  {
+    kanji: '留',
+    meaning: ['keep', 'stay', 'stop'],
+    vocabulary: [
+      { jp: '留学[りゅうがく]する', en: 'to study abroad' },
+      { jp: '留守[るす]', en: 'absence' },
+      { jp: '留[と]まる', en: 'to fasten' },
+      { jp: '留[と]める', en: 'to fasten' },
+      { jp: '書留[かきとめ]', en: 'a registered letter' },
+    ],
+  },
+  {
+    kanji: '的',
+    meaning: ['target', 'adjectival suffix for ...'],
+    vocabulary: [
+      { jp: '目的[もくてき]', en: 'a purpose' },
+      { jp: '〜的[てき]な', en: 'adjectival suffix' },
+    ],
+  },
+  {
+    kanji: '術',
+    meaning: ['method'],
+    vocabulary: [
+      { jp: '手術[しゅじゅつ]', en: 'an operation' },
+      { jp: '美術館[びじゅつかん]', en: 'an art museum' },
+    ],
+  },
+  {
+    kanji: '技',
+    meaning: ['skill'],
+    vocabulary: [{ jp: '技術[ぎじゅつ]', en: 'technique' }],
+  },
+  {
+    kanji: '妻',
+    meaning: ["one's wife"],
+    vocabulary: [
+      { jp: '夫妻[ふさい]', en: 'Mr. and Mrs.' },
+      { jp: '妻[つま]', en: 'a wife' },
+    ],
+  },
+  {
+    kanji: '供',
+    meaning: ['offer'],
+    vocabulary: [
+      { jp: '供給[きょうきゅう]する', en: 'to supply' },
+      { jp: '子供[こども]', en: 'a child' },
+    ],
+  },
+  {
+    kanji: '緒',
+    meaning: ['beginning'],
+    vocabulary: [{ jp: '一緒[いっしょ]に', en: 'together' }],
+  },
+  {
+    kanji: '登',
+    meaning: ['climb'],
+    vocabulary: [
+      { jp: '登場[とうじょう]する', en: 'to appear' },
+      { jp: '登山[とざん]', en: 'mountain climbing' },
+      { jp: '登[のぼ]る', en: 'to climb' },
+    ],
+  },
+  {
+    kanji: '専',
+    meaning: ['exclusive', 'special'],
+    vocabulary: [
+      {
+        jp: '専門[せんもん]',
+        en: 'a special field, a special subject of study',
+      },
+      { jp: '専攻[せんこう]', en: "one's major" },
+    ],
+  },
+  {
+    kanji: '卒',
+    meaning: ['graduate'],
+    vocabulary: [{ jp: '卒業[そつぎょう]する', en: 'to graduate' }],
+  },
+  {
+    kanji: '結',
+    meaning: ['tie', 'conclude'],
+    vocabulary: [
+      { jp: '結果[けっか]', en: 'result' },
+      { jp: '結[むす]ぶ', en: 'to tie' },
+    ],
+  },
+  {
+    kanji: '婚',
+    meaning: ['marry'],
+    vocabulary: [{ jp: '結婚[けっこん]', en: 'marriage' }],
+  },
+  {
+    kanji: '夫',
+    meaning: ["one's husband"],
+    vocabulary: [
+      { jp: '夫人[ふじん]', en: 'Mrs., Lady' },
+      { jp: '夫婦[ふうふ]', en: 'a married couple' },
+      { jp: '夫[おっと]', en: 'a husband' },
+    ],
+  },
+  {
+    kanji: '刺',
+    meaning: ['stick'],
+    vocabulary: [
+      { jp: '名刺[めいし]', en: 'a business card' },
+      { jp: '刺[さ]す', en: 'to stick' },
+      { jp: '刺身[さしみ]', en: 'sashimi, sliced raw fish' },
+    ],
+  },
+  {
+    kanji: '身',
+    meaning: ['body'],
+    vocabulary: [
+      { jp: '身長[しんちょう]', en: 'height' },
+      { jp: '全身[ぜんしん]', en: 'the whole body' },
+      { jp: '身[み]', en: 'a body' },
+      { jp: '身分[みぶん]', en: 'a status, a social position' },
+    ],
+  },
+  {
+    kanji: '独',
+    meaning: ['alone'],
+    vocabulary: [
+      { jp: '独身[どくしん]の', en: 'single' },
+      { jp: '独特[どくとく]の', en: 'peculiar, unique, special' },
+      { jp: '独[ひと]り言[ごと]を言[い]う', en: 'to talk to oneself' },
+    ],
+  },
+  {
+    kanji: '柔',
+    meaning: ['softness', 'gentleness'],
+    vocabulary: [
+      { jp: '柔道[じゅうどう]', en: 'judo' },
+      { jp: '柔[やわ]らかい', en: 'soft' },
+    ],
+  },
+  {
+    kanji: '配',
+    meaning: ['distribute'],
+    vocabulary: [
+      { jp: '心配[しんぱい]する', en: 'to be worried' },
+      { jp: '心配[しんぱい]な', en: 'anxious, uneasy' },
+      { jp: '配達[はいたつ]する', en: 'to deliver' },
+      { jp: '配[くば]る', en: 'to deal, to distribute' },
+    ],
+  },
+
+  // Lesson 6 (101–120)
+  {
+    kanji: '畳',
+    meaning: ['tatami'],
+    vocabulary: [
+      { jp: '6畳[じょう]', en: 'a six-mat room' },
+      { jp: '畳[たたみ]', en: 'tatami' },
+    ],
+  },
+  {
+    kanji: '具',
+    meaning: ['implements'],
+    vocabulary: [
+      { jp: '家具[かぐ]', en: 'furniture' },
+      { jp: '道具[どうぐ]', en: 'a tool' },
+    ],
+  },
+  {
+    kanji: '雑',
+    meaning: ['miscellaneous', 'mixed'],
+    vocabulary: [
+      { jp: '雑誌[ざっし]', en: 'a magazine' },
+      { jp: '雑[ぞう]きん', en: 'a duster' },
+    ],
+  },
+  {
+    kanji: '誌',
+    meaning: ['write down', 'magazine'],
+    vocabulary: [{ jp: '雑誌[ざっし]', en: 'a magazine' }],
+  },
+  {
+    kanji: '童',
+    meaning: ['child'],
+    vocabulary: [{ jp: '童話[どうわ]', en: 'a fairy tale' }],
+  },
+  {
+    kanji: '児',
+    meaning: ['child'],
+    vocabulary: [{ jp: '児童[じどう]', en: 'a pupil, a child' }],
+  },
+  {
+    kanji: '冊',
+    meaning: ['counter for books'],
+    vocabulary: [{ jp: '〜冊[さつ]', en: 'a counter for books' }],
+  },
+  {
+    kanji: '壁',
+    meaning: ['wall'],
+    vocabulary: [{ jp: '壁[かべ]', en: 'a wall' }],
+  },
+  {
+    kanji: '絵',
+    meaning: ['picture'],
+    vocabulary: [
+      { jp: '絵画[かいが]', en: 'a picture' },
+      { jp: '絵[え]', en: 'a picture' },
+    ],
+  },
+  {
+    kanji: '隅',
+    meaning: ['corner'],
+    vocabulary: [{ jp: '隅[すみ]', en: 'a corner' }],
+  },
+  {
+    kanji: '箱',
+    meaning: ['box'],
+    vocabulary: [
+      { jp: '箱[はこ]', en: 'a box' },
+      { jp: 'ごみ箱[ばこ]', en: 'a dust box' },
+    ],
+  },
+  {
+    kanji: '床',
+    meaning: ['floor', 'bed'],
+    vocabulary: [
+      { jp: '起床[きしょう]する', en: 'to get up' },
+      { jp: '床[とこ]の間[ま]', en: 'tokonoma' },
+      { jp: '床屋[とこや]', en: 'a barbershop' },
+      { jp: '床[ゆか]', en: 'a floor' },
+    ],
+  },
+  {
+    kanji: '戸',
+    meaning: ['door'],
+    vocabulary: [
+      { jp: '戸[と]', en: 'a door' },
+      { jp: '雨戸[あまど]', en: 'shutters' },
+      { jp: '戸棚[とだな]', en: 'a cabinet' },
+    ],
+  },
+  {
+    kanji: '庫',
+    meaning: ['storehouse'],
+    vocabulary: [
+      { jp: '金庫[きんこ]', en: 'a safe' },
+      { jp: '車庫[しゃこ]', en: 'a garage' },
+    ],
+  },
+  {
+    kanji: '蔵',
+    meaning: ['store'],
+    vocabulary: [{ jp: '冷蔵庫[れいぞうこ]', en: 'a refrigerator' }],
+  },
+  {
+    kanji: '器',
+    meaning: ['vessel', 'instrument'],
+    vocabulary: [
+      { jp: '食器[しょっき]', en: 'tableware' },
+      { jp: '器具[きぐ]', en: 'an instrument, an appliance' },
+    ],
+  },
+  {
+    kanji: '乳',
+    meaning: ['milk'],
+    vocabulary: [{ jp: '牛乳[ぎゅうにゅう]', en: 'milk' }],
+  },
+  {
+    kanji: '卵',
+    meaning: ['egg'],
+    vocabulary: [{ jp: '卵[たまご]', en: 'an egg' }],
+  },
+  {
+    kanji: '果',
+    meaning: ['fruit', 'result'],
+    vocabulary: [
+      { jp: '果実[かじつ]', en: 'fruit' },
+      { jp: '結果[けっか]', en: 'result' },
+      { jp: '果物[くだもの]', en: 'fruits' },
+    ],
+  },
+  {
+    kanji: '庭',
+    meaning: ['garden', 'home'],
+    vocabulary: [
+      { jp: '家庭[かてい]', en: 'home' },
+      { jp: '庭[にわ]', en: 'a garden' },
+    ],
+  },
+
+  // Lesson 7 (121–140)
+  {
+    kanji: '落',
+    meaning: ['fall down', 'drop down'],
+    vocabulary: [
+      { jp: '落第[らくだい]する', en: 'to fall' },
+      { jp: '落[お]ちる', en: 'to fall down, to drop down' },
+      { jp: '落[お]ち着[つ]く', en: 'to calm' },
+      { jp: '落[お]とす', en: 'to drop' },
+    ],
+  },
+  {
+    kanji: '並',
+    meaning: ['line up', 'put side by side'],
+    vocabulary: [
+      { jp: '並木[なみき]', en: 'a colonnade' },
+      { jp: '並[なら]ぶ', en: 'to line up' },
+      { jp: '並[なら]べる', en: 'to line ... up' },
+    ],
+  },
+  {
+    kanji: '決',
+    meaning: ['decide', 'decision'],
+    vocabulary: [
+      { jp: '決定[けってい]する', en: 'to decide' },
+      { jp: '決心[けっしん]する', en: "to make up one's mind" },
+      { jp: '決[き]まる', en: 'to be decided' },
+      { jp: '決[き]める', en: 'to decide' },
+    ],
+  },
+  {
+    kanji: '折',
+    meaning: ['break off', 'fold'],
+    vocabulary: [
+      { jp: '骨折[こっせつ]する', en: 'to fracture' },
+      { jp: '折[お]れる', en: 'to be broken, to turn, to be folded' },
+      { jp: '折[お]る', en: 'to break, to fold' },
+    ],
+  },
+  {
+    kanji: '続',
+    meaning: ['continue'],
+    vocabulary: [
+      { jp: '接続[せつぞく]する', en: 'to connect' },
+      { jp: '連続[れんぞく]', en: 'continuation, succession' },
+      { jp: '続[つづ]く', en: 'to continue' },
+      { jp: '手続[てつづ]き', en: 'formalities' },
+      { jp: '続[つづ]ける', en: 'to continue' },
+    ],
+  },
+  {
+    kanji: '割',
+    meaning: ['divide', 'break', 'ratio'],
+    vocabulary: [
+      { jp: '割合[わりあい]', en: 'a rate, a ratio' },
+      { jp: '〜割[わり]', en: 'ten percent' },
+      { jp: '割[わ]れる', en: 'to be broken' },
+      { jp: '割[わ]る', en: 'to divide, to break' },
+    ],
+  },
+  {
+    kanji: '流',
+    meaning: ['flow', 'current style'],
+    vocabulary: [
+      { jp: '流行[りゅうこう]', en: 'fashion, vogue' },
+      { jp: '交流[こうりゅう]する', en: 'to exchange' },
+      { jp: '流[なが]れる', en: 'to flow' },
+      { jp: '流[なが]す', en: 'to pour' },
+    ],
+  },
+  {
+    kanji: '渡',
+    meaning: ['cross', 'hand over'],
+    vocabulary: [
+      { jp: '渡[わた]る', en: 'to cross' },
+      { jp: '渡[わた]す', en: 'to take across, to hand over' },
+    ],
+  },
+  {
+    kanji: '曲',
+    meaning: ['note', 'curve'],
+    vocabulary: [
+      { jp: '曲[きょく]', en: 'note' },
+      { jp: '曲線[きょくせん]', en: 'a curve' },
+      { jp: '曲[ま]がる', en: 'to be bent, to curve, to turn' },
+      { jp: '曲[ま]げる', en: 'to bend' },
+    ],
+  },
+  {
+    kanji: '過',
+    meaning: ['pass by', 'exceed', 'mistake'],
+    vocabulary: [
+      { jp: '通過[つうか]する', en: 'to pass' },
+      { jp: '過失[かしつ]', en: 'a mistake' },
+      { jp: '過[す]ぎる', en: 'to pass' },
+      { jp: '〜過[す]ぎ', en: 'past ..., to exceed' },
+      { jp: '過[す]ごす', en: 'to spend, to pass' },
+    ],
+  },
+  {
+    kanji: '助',
+    meaning: ['help'],
+    vocabulary: [
+      { jp: '助手[じょしゅ]', en: 'an assistant' },
+      { jp: '助[たす]かる', en: 'to be saved' },
+      { jp: '助[たす]ける', en: 'to help, to assist' },
+    ],
+  },
+  {
+    kanji: '倒',
+    meaning: ['fall', 'knock down'],
+    vocabulary: [
+      { jp: '面倒[めんどう]な', en: 'troublesome' },
+      { jp: '倒[たお]れる', en: 'to fall' },
+      { jp: '倒[たお]す', en: 'to put down' },
+    ],
+  },
+  {
+    kanji: '増',
+    meaning: ['increase'],
+    vocabulary: [
+      { jp: '増加[ぞうか]する', en: 'to increase' },
+      { jp: '増[ま]す', en: 'to increase, to gain' },
+      { jp: '増[ふ]える', en: 'to increase' },
+      { jp: '増[ふ]やす', en: 'to increase, to add' },
+    ],
+  },
+  {
+    kanji: '減',
+    meaning: ['decrease'],
+    vocabulary: [
+      { jp: '増減[ぞうげん]する', en: 'to increase and decrease' },
+      { jp: '減[へ]る', en: 'to decrease' },
+      { jp: '減[へ]らす', en: 'to reduce, to decrease' },
+    ],
+  },
+  {
+    kanji: '伸',
+    meaning: ['stretch', 'extend', 'grow'],
+    vocabulary: [
+      { jp: '伸[の]びる', en: 'to stretch, to extend, to grow' },
+      { jp: '伸[の]ばす', en: 'to extend, to stretch, to grow' },
+    ],
+  },
+  {
+    kanji: '破',
+    meaning: ['tear', 'break'],
+    vocabulary: [
+      { jp: '破片[はへん]', en: 'fragment' },
+      { jp: '破産[はさん]', en: 'bankruptcy' },
+      { jp: '破[やぶ]れる', en: 'to tear, to rip' },
+      { jp: '破[やぶ]る', en: 'to tear, to break' },
+    ],
+  },
+  {
+    kanji: '育',
+    meaning: ['grow', 'bring up'],
+    vocabulary: [
+      { jp: '教育[きょういく]', en: 'education' },
+      { jp: '育児[いくじ]', en: 'child care' },
+      { jp: '育[そだ]つ', en: 'to grow up' },
+      { jp: '育[そだ]てる', en: 'to bring up, to raise' },
+    ],
+  },
+  {
+    kanji: '燃',
+    meaning: ['to burn'],
+    vocabulary: [
+      { jp: '燃[も]える', en: 'to burn' },
+      { jp: '燃[も]やす', en: 'to burn' },
+    ],
+  },
+  {
+    kanji: '残',
+    meaning: ['to remain', 'remnant'],
+    vocabulary: [
+      { jp: '残念[ざんねん]な', en: 'regrettable' },
+      { jp: '残[のこ]る', en: 'to remain, to be left' },
+      { jp: '残[のこ]す', en: 'to leave' },
+    ],
+  },
+  {
+    kanji: '片',
+    meaning: ['flake', 'one of two'],
+    vocabulary: [
+      { jp: '破片[はへん]', en: 'fragment' },
+      { jp: '片仮名[かたかな]', en: 'katakana' },
+      { jp: '片付[かたづ]ける', en: 'to clear up' },
+      { jp: '片付[かたづ]く', en: 'to finish' },
+      { jp: '片道[かたみち]', en: 'one-way' },
+    ],
+  },
+
+  // Lesson 8 (141–160)
+  {
+    kanji: '越',
+    meaning: ['go beyond', 'exceed'],
+    vocabulary: [
+      { jp: '越[こ]す', en: 'to go over' },
+      { jp: '引[ひ]っ越[こ]す', en: 'to move' },
+      { jp: '越[こ]える', en: 'to go over, to pass' },
+    ],
+  },
+  {
+    kanji: '港',
+    meaning: ['port'],
+    vocabulary: [
+      { jp: '空港[くうこう]', en: 'an airport' },
+      { jp: '港[みなと]', en: 'a port' },
+    ],
+  },
+  {
+    kanji: '神',
+    meaning: ['god', 'spirit'],
+    vocabulary: [
+      { jp: '神話[しんわ]', en: 'a myth' },
+      { jp: '神経[しんけい]', en: 'a nerve' },
+      { jp: '神社[じんじゃ]', en: 'Shinto shrine' },
+      { jp: '神[かみ]', en: 'god' },
+    ],
+  },
+  {
+    kanji: '美',
+    meaning: ['beautiful', 'beauty'],
+    vocabulary: [
+      { jp: '美容院[びようあん]', en: 'a beauty salon' },
+      { jp: '美人[びじん]', en: 'a beauty' },
+      { jp: '美[うつく]しい', en: 'beautiful' },
+    ],
+  },
+  {
+    kanji: '偉',
+    meaning: ['great'],
+    vocabulary: [
+      { jp: '偉大[いだい]な', en: 'great' },
+      { jp: '偉[えら]い', en: 'great' },
+    ],
+  },
+  {
+    kanji: '芸',
+    meaning: ['art', 'skill'],
+    vocabulary: [
+      { jp: '園芸[えんげい]', en: 'horticulture' },
+      { jp: '芸術[げいじゅつ]', en: 'art' },
+      { jp: '芸能[げいのう]', en: 'entertainment, performing arts' },
+    ],
+  },
+  {
+    kanji: '交',
+    meaning: ['intercourse', 'interchange'],
+    vocabulary: [
+      { jp: '交通[こうつう]', en: 'traffic, transportation' },
+      { jp: '交番[こうばん]', en: 'a police box' },
+      { jp: '交[ま]じる', en: 'to mix' },
+      { jp: '交[ま]ざる', en: 'to mix' },
+      { jp: '交[ま]ぜる', en: 'to mix' },
+    ],
+  },
+  {
+    kanji: '差',
+    meaning: ['difference'],
+    vocabulary: [
+      { jp: '差[さ]', en: 'difference' },
+      { jp: '交差点[こうさてん]', en: 'a crossing' },
+    ],
+  },
+  {
+    kanji: '役',
+    meaning: ['service', 'duty', 'role'],
+    vocabulary: [
+      { jp: '市役所[しやくしょ]', en: 'a city hall' },
+      { jp: '役[やく]に立[た]つ', en: 'useful, helpful' },
+      { jp: '役[やく]', en: 'duty, a role' },
+      { jp: '主役[しゅやく]', en: 'the leading role' },
+    ],
+  },
+  {
+    kanji: '公',
+    meaning: ['public', 'fair'],
+    vocabulary: [
+      { jp: '公共[こうきょう]の', en: 'public' },
+      { jp: '公平[こうへい]な', en: 'fair' },
+    ],
+  },
+  {
+    kanji: '園',
+    meaning: ['garden'],
+    vocabulary: [{ jp: '公園[こうえん]', en: 'a park' }],
+  },
+  {
+    kanji: '昔',
+    meaning: ['old days'],
+    vocabulary: [{ jp: '昔[むかし]', en: 'old days' }],
+  },
+  {
+    kanji: '城',
+    meaning: ['castle'],
+    vocabulary: [{ jp: '城[しろ]', en: 'a castle' }],
+  },
+  {
+    kanji: '警',
+    meaning: ['police', 'warn'],
+    vocabulary: [
+      { jp: '警備[けいび]する', en: 'to defend, to guard' },
+      { jp: '警告[けいこく]する', en: 'to warn' },
+    ],
+  },
+  {
+    kanji: '察',
+    meaning: ['presume'],
+    vocabulary: [
+      { jp: '警察[けいさつ]', en: 'police' },
+      { jp: '観察[かんさつ]する', en: 'to observe, to watch' },
+    ],
+  },
+  {
+    kanji: '署',
+    meaning: ['government office', 'write'],
+    vocabulary: [
+      { jp: '消防署[しょうぼうしょ]', en: 'a fire station' },
+      { jp: '署名[しょめい]', en: 'a signature' },
+    ],
+  },
+  {
+    kanji: '防',
+    meaning: ['defend'],
+    vocabulary: [
+      { jp: '予防[よぼう]する', en: 'to prevent' },
+      { jp: '防止[ぼうし]する', en: 'to prevent' },
+      { jp: '防[ふせ]ぐ', en: 'to prevent' },
+    ],
+  },
+  {
+    kanji: '橋',
+    meaning: ['bridge'],
+    vocabulary: [
+      { jp: '鉄橋[てっきょう]', en: 'an iron bridge' },
+      { jp: '橋[はし]', en: 'a bridge' },
+    ],
+  },
+  {
+    kanji: '容',
+    meaning: ['content'],
+    vocabulary: [
+      { jp: '内容[ないよう]', en: 'content' },
+      { jp: '容器[ようき]', en: 'a container, a vessel' },
+    ],
+  },
+  {
+    kanji: '角',
+    meaning: ['angle', 'corner'],
+    vocabulary: [
+      { jp: '方角[ほうがく]', en: 'a direction' },
+      { jp: '角度[かくど]', en: 'an angle' },
+      { jp: '三角形[さんかくけい]', en: 'a triangle' },
+      { jp: '四角形[しかくけい]', en: 'a square' },
+      { jp: '角[かど]', en: 'a corner' },
+    ],
+  },
+
+  // Lesson 9 (161–180)
+  {
+    kanji: '符',
+    meaning: ['sign', 'mark'],
+    vocabulary: [
+      { jp: '切符[きっぷ]', en: 'a ticket' },
+      { jp: '符号[ふごう]', en: 'a mark' },
+    ],
+  },
+  {
+    kanji: '券',
+    meaning: ['ticket', 'coupon'],
+    vocabulary: [
+      { jp: '券[けん]', en: 'a ticket, a coupon' },
+      { jp: '定期券[ていきけん]', en: 'a commuter pass' },
+    ],
+  },
+  {
+    kanji: '枚',
+    meaning: ['a sheet of (paper, clothes etc.)'],
+    vocabulary: [
+      { jp: '〜枚[まい]', en: 'counter for flat things' },
+      { jp: '枚数[まいすう]', en: 'the number of sheets' },
+    ],
+  },
+  {
+    kanji: '札',
+    meaning: ['tag'],
+    vocabulary: [{ jp: '千円札[せんえんさつ]', en: 'a thousand-yen bill' }],
+  },
+  {
+    kanji: '改',
+    meaning: ['reform', 'examine'],
+    vocabulary: [
+      { jp: '改札口[かいさつぐち]', en: 'a ticket gate, a ticket barrier' },
+      { jp: '改[あらた]める', en: 'to renew, to change' },
+      { jp: '改[あらた]めて', en: 'some other time' },
+    ],
+  },
+  {
+    kanji: '算',
+    meaning: ['calculate'],
+    vocabulary: [
+      { jp: '計算[けいさん]する', en: 'to calculate' },
+      { jp: '予算[よさん]', en: 'a budget' },
+    ],
+  },
+  {
+    kanji: '精',
+    meaning: ['spirit'],
+    vocabulary: [
+      { jp: '精算[せいさん]', en: 'adjustment' },
+      { jp: '精神[せいしん]', en: 'spirit' },
+    ],
+  },
+  {
+    kanji: '面',
+    meaning: ['face', 'direction'],
+    vocabulary: [
+      { jp: '表面[ひょうめん]', en: 'a surface' },
+      { jp: '方面[ほうめん]', en: 'a direction' },
+    ],
+  },
+  {
+    kanji: '停',
+    meaning: ['stop'],
+    vocabulary: [
+      { jp: '停止[ていし]する', en: 'to stop' },
+      { jp: '停車[ていしゃ]する', en: 'to stop' },
+      { jp: '停電[ていでん]', en: 'a blackout' },
+      { jp: '停留所[ていりゅうじょ]', en: 'a stop' },
+    ],
+  },
+  {
+    kanji: '刻',
+    meaning: ['time', 'cut'],
+    vocabulary: [
+      { jp: '時刻[じこく]', en: 'time' },
+      { jp: '時刻表[じこくひょう]', en: 'a timetable' },
+      { jp: '深刻[しんこく]な', en: 'serious' },
+      { jp: '刻[きざ]む', en: 'to chop, to mince' },
+    ],
+  },
+  {
+    kanji: '普',
+    meaning: ['widely', 'generally'],
+    vocabulary: [
+      { jp: '普通[ふつう]の', en: 'usual, normal' },
+      { jp: '普段[ふだん]の', en: 'usually' },
+    ],
+  },
+  {
+    kanji: '快',
+    meaning: ['pleasure', 'fast'],
+    vocabulary: [
+      { jp: '快適[かいてき]な', en: 'comfortable' },
+      { jp: '快速電車[かいそくでんしゃ]', en: 'a rapid train' },
+    ],
+  },
+  {
+    kanji: '換',
+    meaning: ['change'],
+    vocabulary: [
+      { jp: '交換[こうかん]する', en: 'to exchange' },
+      { jp: '換気[かんき]する', en: 'to ventilate' },
+      { jp: '乗[の]り換[か]える', en: 'to change, to transfer' },
+    ],
+  },
+  {
+    kanji: '禁',
+    meaning: ['prohibit'],
+    vocabulary: [{ jp: '禁止[きんし]する', en: 'to prohibit' }],
+  },
+  {
+    kanji: '煙',
+    meaning: ['smoke'],
+    vocabulary: [
+      { jp: '煙突[えんとつ]', en: 'a chimney' },
+      { jp: '禁煙[きんえん]', en: 'No Smoking' },
+      { jp: '煙[けむり]', en: 'smoke' },
+      { jp: '煙[けむ]い', en: 'smoky' },
+    ],
+  },
+  {
+    kanji: '険',
+    meaning: ['steep'],
+    vocabulary: [
+      { jp: '冒険[ぼうけん]', en: 'adventure' },
+      { jp: '険[けわ]しい', en: 'steep, severe, grim' },
+    ],
+  },
+  {
+    kanji: '危',
+    meaning: ['danger'],
+    vocabulary: [
+      { jp: '危険[きけん]な', en: 'dangerous' },
+      { jp: '危[あぶ]ない', en: 'dangerous' },
+      { jp: '危[あや]うい', en: 'dangerous' },
+    ],
+  },
+  {
+    kanji: '路',
+    meaning: ['road', 'way'],
+    vocabulary: [
+      { jp: '道路[どうろ]', en: 'a road' },
+      { jp: '線路[せんろ]', en: 'a track, a railroad' },
+      { jp: '通路[つうろ]', en: 'a passage' },
+    ],
+  },
+  {
+    kanji: '側',
+    meaning: ['side'],
+    vocabulary: [{ jp: '両側[りょうがわ]', en: 'both sides' }],
+  },
+  {
+    kanji: '窓',
+    meaning: ['window'],
+    vocabulary: [
+      { jp: '窓[まど]', en: 'a window' },
+      { jp: '窓口[まどぐち]', en: 'a window' },
+    ],
+  },
+
+  // Lesson 10 (181–200)
+  {
+    kanji: '受',
+    meaning: ['receive', 'accept'],
+    vocabulary: [
+      { jp: '受験[じゅけん]する', en: 'to take an entrance examination' },
+      { jp: '受[う]ける', en: 'to receive, to get, to take' },
+    ],
+  },
+  {
+    kanji: '付',
+    meaning: ['attach'],
+    vocabulary: [
+      { jp: '付近[ふきん]の', en: 'neighbouring' },
+      { jp: '付属[ふぞく]する', en: 'to attach' },
+      { jp: '付[つ]く', en: 'to attach, to stick, to adhere' },
+      { jp: '付[つ]ける', en: 'to attach, to put' },
+      { jp: '受付[うけつけ]', en: 'a reception desk, a front desk' },
+    ],
+  },
+  {
+    kanji: '常',
+    meaning: ['normal', 'regular'],
+    vocabulary: [
+      { jp: '日常[にちじょう]の', en: 'daily' },
+      { jp: '常識[じょうしき]', en: 'common sense' },
+      { jp: '正常[せいじょう]な', en: 'normal' },
+      { jp: '常[つね]に', en: 'always' },
+    ],
+  },
+  {
+    kanji: '非',
+    meaning: ['is not', 'not', 'non-', 'un-', 'dis-'],
+    vocabulary: [
+      { jp: '非[ひ]〜', en: 'non-, un-, dis-' },
+      { jp: '非常[ひじょう]の', en: 'emergency' },
+      { jp: '非常口[ひじょうぐち]', en: 'an emergency exit' },
+      { jp: '非常[ひじょう]に', en: 'very, greatly, extremely' },
+    ],
+  },
+  {
+    kanji: '階',
+    meaning: ['floor', 'rank'],
+    vocabulary: [{ jp: '〜階[かい]', en: '...floor' }],
+  },
+  {
+    kanji: '段',
+    meaning: ['step'],
+    vocabulary: [
+      { jp: '階段[かいだん]', en: 'stairs' },
+      { jp: '手段[しゅだん]', en: 'a means, a way, a measure' },
+    ],
+  },
+  {
+    kanji: '営',
+    meaning: ['manage'],
+    vocabulary: [
+      { jp: '営業[えいぎょう]', en: 'business, trade, sales' },
+      { jp: '営業中[えいぎょうちゅう]', en: 'to be open' },
+    ],
+  },
+  {
+    kanji: '準',
+    meaning: ['standard', 'prepare'],
+    vocabulary: [
+      { jp: '水準[すいじゅん]', en: 'a level, standards' },
+      { jp: '基準[きじゅん]', en: 'standards' },
+    ],
+  },
+  {
+    kanji: '備',
+    meaning: ['provide', 'prepare'],
+    vocabulary: [
+      { jp: '準備[じゅんび]する', en: 'to prepare' },
+      { jp: '設備[せつび]', en: 'equipment' },
+      { jp: '備[そな]える', en: 'to prepare' },
+    ],
+  },
+  {
+    kanji: '清',
+    meaning: ['clear'],
+    vocabulary: [
+      { jp: '清潔[せいけつ]な', en: 'clean' },
+      { jp: '清書[せいしょ]する', en: 'to make a fair copy' },
+      { jp: '清[きよ]い', en: 'clean, clear, pure' },
+    ],
+  },
+  {
+    kanji: '掃',
+    meaning: ['sweep'],
+    vocabulary: [
+      { jp: '清掃[せいそう]する', en: 'to clean' },
+      { jp: '掃[は]く', en: 'to sweep' },
+    ],
+  },
+  {
+    kanji: '議',
+    meaning: ['discuss'],
+    vocabulary: [
+      { jp: '会議[かいぎ]', en: 'a meeting, a conference' },
+      { jp: '不思議[ふしぎ]な', en: 'strange, mysterious' },
+    ],
+  },
+  {
+    kanji: '製',
+    meaning: ['make', 'manufacture'],
+    vocabulary: [
+      { jp: '〜製[せい]', en: 'made of ..., made in ...' },
+      { jp: '製品[せいひん]', en: 'a product' },
+      { jp: '製作[せいさく]する', en: 'to make' },
+    ],
+  },
+  {
+    kanji: '綿',
+    meaning: ['cotton'],
+    vocabulary: [
+      { jp: '綿[めん]', en: 'cotton' },
+      { jp: '木綿[もめん]', en: 'cotton' },
+      { jp: '綿100%[めん100%]', en: 'cotton 100%' },
+      { jp: '綿[わた]', en: 'cotton (wool)' },
+    ],
+  },
+  {
+    kanji: '募',
+    meaning: ['gather'],
+    vocabulary: [
+      { jp: '募集[ぼしゅう]する', en: 'to recruit, to invite, to collect' },
+    ],
+  },
+  {
+    kanji: '給',
+    meaning: ['supply', 'give'],
+    vocabulary: [
+      { jp: '給料[きゅうりょう]', en: 'salary' },
+      { jp: '供給[きょうきゅう]する', en: 'to supply' },
+    ],
+  },
+  {
+    kanji: '師',
+    meaning: ['master'],
+    vocabulary: [
+      { jp: '教師[きょうし]', en: 'a teacher' },
+      { jp: '医師[いし]', en: 'a (medical) doctor' },
+    ],
+  },
+  {
+    kanji: '求',
+    meaning: ['seek', 'request'],
+    vocabulary: [
+      { jp: '要求[ようきゅう]する', en: 'to demand, to request' },
+      { jp: '請求[せいきゅう]する', en: 'to ask, to charge' },
+      { jp: '求[もと]める', en: 'to ask, to seek, to request' },
+    ],
+  },
+  {
+    kanji: '修',
+    meaning: ['govern oneself', 'repair'],
+    vocabulary: [
+      { jp: '修理[しゅうり]する', en: 'to repair' },
+      { jp: '修正[しゅうせい]する', en: 'to amend, to revise' },
+    ],
+  },
+  {
+    kanji: '承',
+    meaning: ['accept'],
+    vocabulary: [
+      { jp: '承認[しょうにん]する', en: 'to approve' },
+      { jp: '承[うけたまわ]る', en: 'to accept (humble)' },
+    ],
+  },
+
+  // Lesson 11 (201–220)
+  {
+    kanji: '材',
+    meaning: ['material'],
+    vocabulary: [{ jp: '材料[ざいりょう]', en: 'material' }],
+  },
+  {
+    kanji: '玉',
+    meaning: ['ball'],
+    vocabulary: [
+      { jp: '玉[たま]', en: 'a ball' },
+      { jp: '玉[たま]ねぎ', en: 'an onion' },
+    ],
+  },
+  {
+    kanji: '個',
+    meaning: ['individual', 'general counter for small items'],
+    vocabulary: [
+      { jp: '個人[こじん]', en: 'an individual' },
+      { jp: '〜個[こ]', en: 'general counter for small items' },
+    ],
+  },
+  {
+    kanji: '塩',
+    meaning: ['salt'],
+    vocabulary: [
+      { jp: '食塩[しょくえん]', en: 'salt' },
+      { jp: '塩[しお]', en: 'salt' },
+    ],
+  },
+  {
+    kanji: '粉',
+    meaning: ['powder'],
+    vocabulary: [
+      { jp: '粉[こ]', en: 'powder' },
+      { jp: '小麦粉[こむぎこ]', en: 'flour' },
+      { jp: '粉[こな]', en: 'powder' },
+    ],
+  },
+  {
+    kanji: '杯',
+    meaning: ['cup', 'glass'],
+    vocabulary: [{ jp: '〜杯[はい]', en: 'a cup of ..., a glass of ...' }],
+  },
+  {
+    kanji: '固',
+    meaning: ['hard', 'solid'],
+    vocabulary: [
+      { jp: '固体[こたい]', en: 'a solid' },
+      { jp: '固[かた]い', en: 'hard, solid' },
+    ],
+  },
+  {
+    kanji: '厚',
+    meaning: ['thick'],
+    vocabulary: [
+      {
+        jp: '厚生労働省[こうせいろうどうしょう]',
+        en: 'Ministry of Health, Labor and Welfare',
+      },
+      { jp: '厚[あつ]い', en: 'thick' },
+      { jp: '厚かまし[あつかまし]い', en: 'impudent' },
+    ],
+  },
+  {
+    kanji: '薄',
+    meaning: ['thin'],
+    vocabulary: [{ jp: '薄[うす]い', en: 'thin' }],
+  },
+  {
+    kanji: '量',
+    meaning: ['quantity', 'measure'],
+    vocabulary: [
+      { jp: '量[りょう]', en: 'quantity' },
+      { jp: '分量[ぶんりょう]', en: 'quantity' },
+      { jp: '量[はか]る', en: 'to measure' },
+    ],
+  },
+  {
+    kanji: '湯',
+    meaning: ['hot water', 'boiled water', 'bath'],
+    vocabulary: [{ jp: '湯[ゆ]', en: 'hot water, boiled water' }],
+  },
+  {
+    kanji: '沸',
+    meaning: ['boil'],
+    vocabulary: [
+      { jp: '沸[わ]く', en: 'to boil' },
+      { jp: '沸[わ]かす', en: 'to boil' },
+    ],
+  },
+  {
+    kanji: '軟',
+    meaning: ['soft'],
+    vocabulary: [{ jp: '軟[やわ]らかい', en: 'soft, tender' }],
+  },
+  {
+    kanji: '混',
+    meaning: ['mix'],
+    vocabulary: [
+      { jp: '混雑[こんざつ]する', en: 'to be crowded' },
+      { jp: '混[ま]じる', en: 'to mix' },
+      { jp: '混[ま]ざる', en: 'to mix' },
+      { jp: '混[ま]ぜる', en: 'to mix' },
+    ],
+  },
+  {
+    kanji: '等',
+    meaning: ['equal', 'class', '... and so on'],
+    vocabulary: [
+      { jp: '〜等[とう]', en: '... and so on' },
+      { jp: '等分[とうぶん]する', en: 'to divide ... equally' },
+      { jp: '高等[こうとう]の', en: 'high class' },
+      { jp: '平等[びょうどう]な', en: 'equal' },
+      { jp: '等[ひと]しい', en: 'equal' },
+    ],
+  },
+  {
+    kanji: '丸',
+    meaning: ['circle', 'round'],
+    vocabulary: [
+      { jp: '丸[まる]', en: 'a circle' },
+      { jp: '丸[まる]い', en: 'round' },
+    ],
+  },
+  {
+    kanji: '包',
+    meaning: ['wrap'],
+    vocabulary: [
+      { jp: '包装[ほうそう]', en: 'wrapping, packing' },
+      { jp: '包帯[ほうたい]', en: 'bandage' },
+      { jp: '包[つつ]む', en: 'to wrap' },
+      { jp: '小包[こづつみ]', en: 'a parcel, a package' },
+    ],
+  },
+  {
+    kanji: '巻',
+    meaning: ['roll'],
+    vocabulary: [
+      { jp: '〜巻[かん]', en: '... volume' },
+      { jp: '巻[ま]く', en: 'to wind, to roll, to reel, to coil' },
+    ],
+  },
+  {
+    kanji: '麦',
+    meaning: ['wheat'],
+    vocabulary: [
+      { jp: '小麦[こむぎ]', en: 'wheat' },
+      { jp: '蕎麦[そば]', en: 'soba' },
+    ],
+  },
+  {
+    kanji: '焼',
+    meaning: ['burn'],
+    vocabulary: [
+      { jp: '焼[や]ける', en: 'to be burned' },
+      { jp: '焼[や]く', en: 'to burn, to grill, to roast, to fry' },
+    ],
+  },
+
+  // Lesson 12 (221–240)
+  {
+    kanji: '編',
+    meaning: ['edit', 'knit'],
+    vocabulary: [
+      { jp: '編集[へんしゅう]する', en: 'to edit' },
+      { jp: '編[あ]む', en: 'to knit' },
+    ],
+  },
+  {
+    kanji: '示',
+    meaning: ['show', 'message'],
+    vocabulary: [
+      { jp: '指示[しじ]する', en: 'to indicate, to instruct' },
+      { jp: '表示[ひょうじ]する', en: 'to indicate, to show' },
+      { jp: '示[しめ]す', en: 'to show, to reveal' },
+    ],
+  },
+  {
+    kanji: '成',
+    meaning: ['form', 'achieve', 'become'],
+    vocabulary: [
+      { jp: '成長[せいちょう]する', en: 'to grow' },
+      { jp: '成人[せいじん]', en: 'an adult' },
+      { jp: '作成[さくせい]する', en: 'to make, to draw up' },
+      { jp: '成[な]る', en: 'to become' },
+      {
+        jp: '成田国際空港[なりたこくさいくうこう]',
+        en: 'Narita International Airport',
+      },
+    ],
+  },
+  {
+    kanji: '存',
+    meaning: ['exist'],
+    vocabulary: [
+      { jp: '存在[そんざい]する', en: 'to exist' },
+      { jp: '存[ぞん]じる', en: 'to know (humble)' },
+    ],
+  },
+  {
+    kanji: '保',
+    meaning: ['keep'],
+    vocabulary: [
+      { jp: '保存[ほぞん]する', en: 'to preserve' },
+      { jp: '保証[ほしょう]する', en: 'to guarantee' },
+    ],
+  },
+  {
+    kanji: '設',
+    meaning: ['set up'],
+    vocabulary: [
+      { jp: '設計[せっけい]する', en: 'to plan, to design' },
+      { jp: '建設[けんせつ]する', en: 'to build, to construct' },
+      { jp: '設定[せってい]する', en: 'to set, to fix' },
+    ],
+  },
+  {
+    kanji: '印',
+    meaning: ['mark'],
+    vocabulary: [
+      { jp: '印象[いんしょう]', en: 'impression' },
+      { jp: '印[しるし]', en: 'a mark' },
+      { jp: '目印[めじるし]', en: 'a mark, a sign' },
+    ],
+  },
+  {
+    kanji: '刷',
+    meaning: ['print'],
+    vocabulary: [
+      { jp: '印刷[いんさつ]する', en: 'to print' },
+      { jp: '刷[す]る', en: 'to print' },
+    ],
+  },
+  {
+    kanji: '信',
+    meaning: ['believe', 'message'],
+    vocabulary: [
+      { jp: '通信[つうしん]', en: 'correspondence' },
+      { jp: '信[しん]じる', en: 'to believe' },
+      { jp: '自信[じしん]', en: 'confidence' },
+      { jp: '信号[しんごう]', en: 'a (traffic) signal' },
+      { jp: '送信[そうしん]する', en: 'to send a message' },
+    ],
+  },
+  {
+    kanji: '了',
+    meaning: ['complete'],
+    vocabulary: [
+      { jp: '終了[しゅうりょう]する', en: 'to finish, to expire' },
+      { jp: '完了[かんりょう]する', en: 'to complete' },
+    ],
+  },
+  {
+    kanji: '列',
+    meaning: ['line'],
+    vocabulary: [
+      { jp: '列[れつ]', en: 'a line' },
+      { jp: '列車[れっしゃ]', en: 'a train' },
+      { jp: '列島[れっとう]', en: 'an archipelago' },
+      { jp: '行列[ぎょうれつ]', en: 'a line' },
+    ],
+  },
+  {
+    kanji: '戻',
+    meaning: ['return'],
+    vocabulary: [
+      { jp: '戻[もど]る', en: 'to return' },
+      { jp: '戻[もど]す', en: 'to return' },
+    ],
+  },
+  {
+    kanji: '更',
+    meaning: ['change', 'besides'],
+    vocabulary: [
+      { jp: '変更[へんこう]する', en: 'to change' },
+      { jp: '更新[こうしん]する', en: 'to renew, to update' },
+      { jp: '更[さら]に', en: 'besides, moreover' },
+      { jp: '夜[よ]が更[ふ]ける', en: 'to grow late at night' },
+    ],
+  },
+  {
+    kanji: '移',
+    meaning: ['move'],
+    vocabulary: [
+      { jp: '移動[いどう]する', en: 'to move' },
+      { jp: '移[うつ]る', en: 'to move' },
+      { jp: '移[うつ]す', en: 'to move' },
+    ],
+  },
+  {
+    kanji: '除',
+    meaning: ['to except', 'to remove'],
+    vocabulary: [
+      { jp: '削除[さくじょ]する', en: 'to delete' },
+      { jp: '掃除[そうじ]する', en: 'to clean' },
+      { jp: '除[のぞ]く', en: 'to take off, to remove' },
+    ],
+  },
+  {
+    kanji: '能',
+    meaning: ['ability'],
+    vocabulary: [
+      { jp: '能力[のうりょく]', en: 'ability' },
+      { jp: '機能[きのう]', en: 'a function' },
+      { jp: '性能[せいのう]', en: 'performance' },
+    ],
+  },
+  {
+    kanji: '接',
+    meaning: ['contact', 'touch'],
+    vocabulary: [
+      { jp: '面接[めんせつ]', en: 'an interview' },
+      { jp: '直接[ちょくせつ]の', en: 'direct' },
+      { jp: '接続[せつぞく]する', en: 'to connect, to access' },
+    ],
+  },
+  {
+    kanji: '候',
+    meaning: ['season', 'wait'],
+    vocabulary: [
+      { jp: '気候[きこう]', en: 'climate' },
+      { jp: '天候[てんこう]', en: 'weather' },
+    ],
+  },
+  {
+    kanji: '補',
+    meaning: ['supplement'],
+    vocabulary: [
+      { jp: '候補[こうほ]', en: 'a candidate' },
+      { jp: '補[おぎな]う', en: 'to supplement' },
+    ],
+  },
+  {
+    kanji: '囲',
+    meaning: ['enclose'],
+    vocabulary: [
+      { jp: '周囲[しゅうい]', en: 'circumference' },
+      { jp: '範囲[はんい]', en: 'a scope, a sphere' },
+      { jp: '囲[かこ]む', en: 'to surround' },
+    ],
+  },
+
+  // Lesson 13 (241–250)
+  {
+    kanji: '祖',
+    meaning: ['ancestor'],
+    vocabulary: [
+      { jp: '祖先[そせん]', en: 'an ancestor' },
+      { jp: '先祖[せんぞ]', en: 'an ancestor' },
+      { jp: '祖父[そふ]', en: 'a grandfather' },
+      { jp: '祖母[そぼ]', en: 'a grandmother' },
+    ],
+  },
+  {
+    kanji: '怒',
+    meaning: ['anger'],
+    vocabulary: [{ jp: '怒[おこ]る', en: 'to get angry' }],
+  },
+  {
+    kanji: '泣',
+    meaning: ['cry'],
+    vocabulary: [{ jp: '泣[な]く', en: 'to cry' }],
+  },
+  {
+    kanji: '彼',
+    meaning: ['he', 'that'],
+    vocabulary: [
+      { jp: '彼[かれ]', en: 'he' },
+      { jp: '彼女[かのじょ]', en: 'she' },
+    ],
+  },
+  {
+    kanji: '恥',
+    meaning: ['shame', 'shy'],
+    vocabulary: [{ jp: '恥[は]ずかしい', en: 'ashamed, shy' }],
+  },
+  {
+    kanji: '息',
+    meaning: ['breath'],
+    vocabulary: [
+      { jp: '休息[きゅうそく]する', en: 'to rest' },
+      { jp: '息[いき]', en: 'breath' },
+      { jp: 'ため息[いき]', en: 'a sigh' },
+      { jp: '息子[むすこ]', en: 'a son' },
+    ],
+  },
+  {
+    kanji: '抱',
+    meaning: ['hold'],
+    vocabulary: [
+      { jp: '抱[だ]く', en: 'to hold' },
+      { jp: '抱[いだ]く', en: 'to entertain' },
+      { jp: '抱[かか]える', en: 'to hold' },
+    ],
+  },
+  {
+    kanji: '娘',
+    meaning: ['daughter', 'girl'],
+    vocabulary: [{ jp: '娘[むすめ]', en: 'a daughter' }],
+  },
+  {
+    kanji: '孫',
+    meaning: ['descendant', 'grandchild'],
+    vocabulary: [
+      { jp: '子孫[しそん]', en: 'a descendant, posterity' },
+      { jp: '孫[まご]', en: 'a grandchild' },
+    ],
+  },
+  {
+    kanji: '君',
+    meaning: ['ruler', 'mister', 'you'],
+    vocabulary: [
+      { jp: '〜君[くん]', en: "suffix added to a person's name" },
+      { jp: '君[きみ]', en: 'you' },
+    ],
+  },
+]
+
 export const KANJI_TEXTBOOK_MAP = new Map(
   KANJI_TEXTBOOK.map((x) => [x.kanji, x]),
 )

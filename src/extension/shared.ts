@@ -56,6 +56,12 @@ export enum FuriganaMode {
   ROMAJI = 3,
 }
 
+export enum Dictionary {
+  UNIDIC = 'unidic',
+  IPADIC = 'ipadic',
+  IPADIC_NEOLOGD = 'ipadic-neologd',
+}
+
 export type SyncStorage = {
   enabled: boolean
   ankiUrl: string
@@ -66,10 +72,40 @@ export type SyncStorage = {
   ankiEnabled: boolean
   ankiKanjiEnabled: boolean
   furigana: FuriganaMode
+  dictionary: Dictionary
+}
+
+export type State = {
+  ankiVocabAvailable: boolean
+  ankiKanjiAvailable: boolean
+  isTokenizerReady: boolean
 }
 
 export type KanjiIntervals = Map<string, number> | undefined
 
+export const DICTIONARIES: Record<
+  Dictionary,
+  { title: string; url: string; reading: number; forms: number[] }
+> = {
+  [Dictionary.UNIDIC]: {
+    title: 'unidic (50 MB)',
+    url: 'https://github.com/lindera/lindera/releases/download/v4.0.0/lindera-unidic-4.0.0.zip',
+    reading: 9,
+    forms: [3, 4, 5, 6, 7, 8, 9, 10, 11],
+  },
+  [Dictionary.IPADIC]: {
+    title: 'ipadic (15 MB)',
+    url: 'https://github.com/lindera/lindera/releases/download/v4.0.0/lindera-ipadic-4.0.0.zip',
+    reading: 7,
+    forms: [2, 3, 4, 5, 6, 7, 8],
+  },
+  [Dictionary.IPADIC_NEOLOGD]: {
+    title: 'ipadic-neologd (291 MB)',
+    url: 'https://github.com/lindera/lindera/releases/download/v4.0.0/lindera-ipadic-neologd-4.0.0.zip',
+    reading: 7,
+    forms: [2, 3, 4, 5, 6, 7, 8],
+  },
+}
 /** Get kanji intervals */
 export function getKanjiIntervals(): Promise<KanjiIntervals> {
   return chrome.runtime.sendMessage({
@@ -93,12 +129,11 @@ export function checkConnection(): Promise<boolean> {
 }
 
 /** Get data from storage */
-export function storageGet<T extends keyof SyncStorage>(
-  keys: T[],
-): Promise<Pick<SyncStorage, T>> {
+export function storageGet<T extends keyof SyncStorage>(): Promise<
+  Pick<SyncStorage, T>
+> {
   return chrome.runtime.sendMessage({
     type: 'storageGet',
-    keys,
   })
 }
 
@@ -107,6 +142,13 @@ export function storageSet(data: Partial<SyncStorage>) {
   return chrome.runtime.sendMessage({
     type: 'storageSet',
     data,
+  })
+}
+
+/** Get data from storage */
+export function stateGet(): Promise<State> {
+  return chrome.runtime.sendMessage({
+    type: 'stateGet',
   })
 }
 

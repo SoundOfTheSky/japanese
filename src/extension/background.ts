@@ -1,4 +1,4 @@
-import { Semaphore } from '@softsky/utils'
+import { noop, Semaphore } from '@softsky/utils'
 import __wbg_init, {
   Tokenizer,
   TokenizerBuilder,
@@ -8,24 +8,29 @@ import {
   downloadDictionary,
   listDictionaries,
   loadDictionaryFiles,
-  removeDictionary,
 } from 'lindera-wasm-web/opfs'
 
 import { kanaToRomaji, katakanaToHiragana } from './japanese'
-import { FuriganaMode, request, SyncStorage, TokenizeResult } from './shared'
+import {
+  DICTIONARIES,
+  Dictionary,
+  FuriganaMode,
+  request,
+  State,
+  SyncStorage,
+  TokenizeResult,
+} from './shared'
 
 type Message =
   | TokenizeMessage
-  | CheckConnectionMessage
   | StorageGetMessage
   | StorageSetMessage
+  | StateGetMessage
+  | StateSetMessage
   | GetKanjiIntervalsMessage
 type TokenizeMessage = {
   type: 'tokenize'
   text: string
-}
-type CheckConnectionMessage = {
-  type: 'checkConnection'
 }
 type StorageGetMessage = {
   type: 'storageGet'
@@ -34,36 +39,45 @@ type StorageSetMessage = {
   type: 'storageSet'
   data: Partial<SyncStorage>
 }
+type StateGetMessage = {
+  type: 'stateGet'
+}
+type StateSetMessage = {
+  type: 'stateSet'
+  data: Partial<State>
+}
 type GetKanjiIntervalsMessage = {
   type: 'getKanjiIntervals'
 }
 
-const DICT_NAME = 'lindera-unidic-3.0.6'
-const DICT_DETAILS_READING = 9
-const DICT_DETAILS_BASE_FORM = 10
 const ankiIntervals = new Map<string, number>()
 const ankiKanjiIntervals = new Map<string, number>()
 const pitch = new Map<string, number>()
 const ankiSemaphore = new Semaphore(1)
 let lastAnkiIntervalsUpdate = 0
-let ankiAvailable = false
-let ankiKanjiAvailable = false
 let storage: SyncStorage
+const state: State = {
+  ankiVocabAvailable: false,
+  ankiKanjiAvailable: false,
+  isTokenizerReady: false,
+}
 let tokenizer: Tokenizer
-const initPromise = initialize()
+let isWBGInit = false
+void initialize()
 
 chrome.runtime.onMessage.addListener(async (message: Message) => {
   // Wait for initialization
-  await initPromise
   switch (message.type) {
     case 'tokenize':
       return tokenize(message.text)
-    case 'checkConnection':
-      return checkConnection()
     case 'storageGet':
       return chrome.storage.sync.get()
     case 'storageSet':
       return storageSet(message.data)
+    case 'stateGet':
+      return state
+    case 'stateSet':
+      return stateSet(message.data)
     case 'getKanjiIntervals':
       return getKanjiIntervals()
   }
@@ -71,7 +85,7 @@ chrome.runtime.onMessage.addListener(async (message: Message) => {
 
 async function getKanjiIntervals() {
   await updateAnkiIntervals()
-  if (ankiKanjiAvailable) return ankiKanjiIntervals
+  if (state.ankiKanjiAvailable) return ankiKanjiIntervals
 }
 
 function utf8Length(code: number): number {
@@ -83,11 +97,11 @@ function utf8Length(code: number): number {
 
 /** Run tokenizer */
 async function tokenize(text: string): Promise<TokenizeResult[]> {
+  if (!state.isTokenizerReady) throw new Error('Tokenizer is not ready')
   await updateAnkiIntervals()
-
   let byteIndex = 0
   let charIndex = 0
-
+  const dict = DICTIONARIES[storage.dictionary]
   return tokenizer.tokenize(text).map((token) => {
     while (byteIndex < token.byte_start) {
       const code = text.codePointAt(charIndex)!
@@ -99,13 +113,12 @@ async function tokenize(text: string): Promise<TokenizeResult[]> {
       text: tokenSurface,
       position: charIndex,
     }
-    const tokenBaseForm = token.details[DICT_DETAILS_BASE_FORM]!
+    const tokenDetailsReading = token.details[dict.reading]!
     /**
      * Convert reading to furigana.
      * Strip out common parts between reading and text at the start and the end.
      */
     if (storage.furigana !== FuriganaMode.NONE) {
-      const tokenDetailsReading = token.details[DICT_DETAILS_READING]!
       let textReading = tokenSurface
       let tokenReading = tokenDetailsReading
       if (storage.furigana === FuriganaMode.HIRAGANA) {
@@ -131,10 +144,21 @@ async function tokenize(text: string): Promise<TokenizeResult[]> {
         }
     }
 
-    if (ankiAvailable) result.interval = ankiIntervals.get(tokenBaseForm) ?? -1
+    // Anki interval
+    if (state.ankiVocabAvailable) {
+      let max = -1
+      for (let i = 0; i < dict.forms.length; i++) {
+        const tokenForm = token.details[dict.forms[i]!]!
+        if (tokenForm !== '*') {
+          const n = ankiIntervals.get(tokenForm) ?? -1
+          if (n > max) max = n
+        }
+      }
+      result.interval = max
+    }
 
-    const pitchAccent = pitch.get(tokenBaseForm)
-    if (pitchAccent !== undefined) result.pitch = pitchAccent
+    result.pitch = pitch.get(tokenDetailsReading)
+
     return result
   })
 }
@@ -153,23 +177,6 @@ async function ankiRequest<T>(body: any, ankiUrl: string): Promise<T> {
   })
   if (json.error) throw new Error(json.error)
   return json.result
-}
-
-/** Check if we are connected */
-async function checkConnection(): Promise<boolean> {
-  try {
-    const anki = await request<{ apiVersion: 'AnkiConnect v.6' }>(
-      storage.ankiUrl,
-      {
-        method: 'POST',
-      },
-    )
-    lastAnkiIntervalsUpdate = 0
-    await updateAnkiIntervals()
-    return +anki.apiVersion.replace(/[^0-9]/g, '') >= 6
-  } catch {
-    return false
-  }
 }
 
 /** Update the Anki intervals map. Cooldown 1 minute */
@@ -213,11 +220,11 @@ async function updateAnkiIntervals() {
             card.interval,
           )
         }
-        ankiAvailable = true
+        await stateSet({ ankiVocabAvailable: true })
       } catch {
-        ankiAvailable = false
+        await stateSet({ ankiVocabAvailable: false })
       }
-    } else ankiAvailable = false
+    } else await stateSet({ ankiVocabAvailable: false })
     if (
       storage.ankiKanjiQuery &&
       storage.ankiKanjiField &&
@@ -251,11 +258,11 @@ async function updateAnkiIntervals() {
             card.interval,
           )
         }
-        ankiKanjiAvailable = true
+        await stateSet({ ankiKanjiAvailable: true })
       } catch {
-        ankiKanjiAvailable = false
+        await stateSet({ ankiKanjiAvailable: false })
       }
-    } else ankiKanjiAvailable = false
+    } else await stateSet({ ankiKanjiAvailable: false })
     lastAnkiIntervalsUpdate = now
   } finally {
     ankiSemaphore.release()
@@ -264,14 +271,31 @@ async function updateAnkiIntervals() {
 
 /** Set data to storage */
 async function storageSet(data: Partial<SyncStorage>) {
+  if (data.dictionary && storage.dictionary !== data.dictionary)
+    void setDictionary(data.dictionary)
   Object.assign(storage, data)
   await chrome.storage.sync.set(data)
+  lastAnkiIntervalsUpdate = 0
+  await updateAnkiIntervals()
   const tabs = await chrome.tabs.query({})
   for (let index = 0; index < tabs.length; index++) {
     const id = tabs[index]!.id
     if (id !== undefined)
-      void chrome.tabs.sendMessage(id, { type: 'storage', storage })
+      void chrome.tabs.sendMessage(id, { type: 'storage', storage }).catch(noop)
   }
+  void chrome.runtime.sendMessage({ type: 'storage', storage }).catch(noop)
+}
+
+/** Set data to state */
+async function stateSet(data: Partial<State>) {
+  Object.assign(state, data)
+  const tabs = await chrome.tabs.query({})
+  for (let index = 0; index < tabs.length; index++) {
+    const id = tabs[index]!.id
+    if (id !== undefined)
+      void chrome.tabs.sendMessage(id, { type: 'state', state }).catch(noop)
+  }
+  void chrome.runtime.sendMessage({ type: 'state', state }).catch(noop)
 }
 
 async function initializeStorage() {
@@ -285,6 +309,7 @@ async function initializeStorage() {
     ankiUrl: 'http://127.0.0.1:8765',
     enabled: true,
     furigana: FuriganaMode.NONE,
+    dictionary: Dictionary.UNIDIC,
   }
   storage = await chrome.storage.sync.get<SyncStorage>()
   for (const key in DEFAULT_DATA)
@@ -308,18 +333,21 @@ async function initializePitchAccents() {
   }
 }
 
-async function initializeTokenizer() {
+async function initializeWBG() {
+  isWBGInit = false
   await __wbg_init()
+  isWBGInit = true
+  await setDictionary(storage.dictionary)
+}
+
+async function setDictionary(name: Dictionary) {
+  if (!isWBGInit) return
+  await stateSet({ isTokenizerReady: false })
+  const dictMeta = DICTIONARIES[name]
   const dictionaries = await listDictionaries()
-  if (dictionaries.length !== 1 || dictionaries[0] !== DICT_NAME) {
-    for (let index = 0; index < dictionaries.length; index++)
-      await removeDictionary(dictionaries[index]!)
-    await downloadDictionary(
-      chrome.runtime.getURL(`assets/${DICT_NAME}.zip`),
-      DICT_NAME,
-    )
-  }
-  const files = await loadDictionaryFiles(DICT_NAME)
+  if (!dictionaries.includes(name)) await downloadDictionary(dictMeta.url, name)
+  // load and build tokenizer
+  const files = await loadDictionaryFiles(name)
   const dict = loadDictionaryFromBytes(
     files.metadata,
     files.dictDa,
@@ -334,12 +362,13 @@ async function initializeTokenizer() {
   builder.setDictionaryInstance(dict)
   builder.setMode('normal')
   tokenizer = builder.build()
+  await stateSet({ isTokenizerReady: true })
 }
 
 function initialize() {
   return Promise.all([
     initializeStorage(),
     initializePitchAccents(),
-    initializeTokenizer(),
+    initializeWBG(),
   ])
 }

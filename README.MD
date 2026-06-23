@@ -86,7 +86,7 @@ It's a compilation of multiple yomitan dictionaries into one with embedded WaniK
 2. Download/update "assets/*"
    1. [jitendex-yomitan](https://github.com/stephenmk/stephenmk.github.io/releases/latest/download/jitendex-yomitan.zip)
    2. [KANJIDIC_english](https://github.com/yomidevs/jmdict-yomitan/releases/latest/download/KANJIDIC_english.zip)
-   3. [jpdb_frequency](https://github.com/toasted-nutbread/yomichan-bccwj-frequency-dictionary/releases/latest/download/BCCWJ-LUW.zip)
+   3. [BCCWJ-LUW](https://github.com/toasted-nutbread/yomichan-bccwj-frequency-dictionary/releases/latest/download/BCCWJ-LUW.zip)
    4. [kotu_pitch](https://kotu.io/yomitan/kotu_pitch.zip)
 3. Run anki + ankiconnect
 4. Set .env WK token

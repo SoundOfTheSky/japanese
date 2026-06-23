@@ -1,4 +1,4 @@
-import { mkdirSync, rmSync } from 'node:fs'
+import { mkdirSync } from 'node:fs'
 import { cp, readdir, rename } from 'node:fs/promises'
 import Path from 'node:path'
 
@@ -25,16 +25,16 @@ export default class YomitanDictionary {
   public term_meta: DictionaryTermMetaBankV3 = []
 
   public constructor(public index: DictionaryIndex) {
-    rmSync(Path.join('assets', index.title), {
-      force: true,
-      recursive: true,
-    })
+    // rmSync(Path.join('assets', index.title), {
+    //   force: true,
+    //   recursive: true,
+    // })
     mkdirSync(Path.join('assets', index.title), {
       recursive: true,
     })
-    rmSync(Path.join('dist', index.title) + '.zip', {
-      force: true,
-    })
+    // rmSync(Path.join('dist', index.title) + '.zip', {
+    //   force: true,
+    // })
   }
 
   public async save() {
@@ -44,10 +44,6 @@ export default class YomitanDictionary {
     for (const bank of BANKS) await this.saveBank(bank)
     await $`zip -r -9 ../../dist/${this.index.title}.zip .`.cwd(path)
     await rename(indexPath, Path.join('dist', this.index.title + '.json'))
-    // rmSync(path, {
-    //   force: true,
-    //   recursive: true,
-    // })
   }
 
   public async merge(name: string) {
@@ -56,9 +52,6 @@ export default class YomitanDictionary {
     if (!(await file(indexPath).exists())) {
       console.log(`Unzipping ${name}...`)
       await $`unzip ${path}.zip -d ${path}`
-      rmSync(path + '.zip', {
-        force: true,
-      })
     }
     console.log(`Merging ${name}...`)
     for (const bank of BANKS) await this.mergeBanks(name, bank)
