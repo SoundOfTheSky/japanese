@@ -1,3 +1,5 @@
+import { DownloadProgress } from 'lindera-wasm-web/opfs'
+
 export type YomitanTokenizerResult = {
   id: string
   source: string
@@ -79,6 +81,7 @@ export type State = {
   ankiVocabAvailable: boolean
   ankiKanjiAvailable: boolean
   isTokenizerReady: boolean
+  dictionaryDownloadProgress: DownloadProgress
 }
 
 export type KanjiIntervals = Map<string, number> | undefined

@@ -3,6 +3,7 @@ import { wait } from '@softsky/utils'
 import {
   FuriganaMode,
   getKanjiIntervals,
+  storageGet,
   SyncStorage,
   tokenize,
 } from './shared'
@@ -36,12 +37,14 @@ void Promise.all([
     }, 500)
   }),
   // Storage load
-  chrome.storage.sync.get<SyncStorage>().then((x) => (storage = x)),
+  storageGet().then((x) => (storage = x)),
 ]).then(() => {
   chrome.runtime.onMessage.addListener(
-    (message: { type: 'storage'; storage: SyncStorage }) => {
-      storage = message.storage
-      reload()
+    (message: { type: string; storage: SyncStorage }) => {
+      if (message.type === 'storage') {
+        storage = message.storage
+        reload()
+      }
     },
   )
   reload()

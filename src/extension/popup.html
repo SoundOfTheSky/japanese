@@ -81,12 +81,18 @@
           <td><label for="dictionary">Tokenizer dictionary</label></td>
           <td>
             <select id="dictionary">
-              <option value="unidic">unidic</option>
+              <option value="unidic">unidic (Recommended)</option>
               <option value="ipadic">ipadic</option>
               <option value="ipadic-neologd">ipadic-neologd</option>
             </select>
           </td>
           <td><div class="bulb" id="dictionary-status"></div></td>
+        </tr>
+        <tr class="dictionary-download-progress-row">
+          <td></td>
+          <td>
+            <progress value="0" max="100"></progress>
+          </td>
         </tr>
       </tbody>
     </table>

@@ -1,5 +1,5 @@
 body {
-  min-width: 240px;
+  min-width: 320px;
   padding: 16px;
   background-color: #1c1b22;
   color: #eee;
@@ -44,4 +44,8 @@ input[type='text']:focus {
   height: 12px;
   border-radius: 50%;
   background-color: yellow;
+}
+
+.dictionary-download-progress-row {
+  display: none;
 }

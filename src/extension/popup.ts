@@ -25,6 +25,14 @@ const $dictionaryField = document.getElementById(
 const $dictionaryStatus = document.getElementById('dictionary-status')!
 const $ankiVocabStatus = document.getElementById('anki-vocab-status')!
 const $ankiKanjiStatus = document.getElementById('anki-kanji-status')!
+const $dictionaryDownloadProgressRow =
+  document.querySelector<HTMLTableRowElement>(
+    '.dictionary-download-progress-row',
+  )!
+const $dictionaryDownloadTitle =
+  $dictionaryDownloadProgressRow.querySelector('td')!
+const $dictionaryDownloadProgress =
+  $dictionaryDownloadProgressRow.querySelector('progress')!
 for (const $input of [
   $ankiEnabled,
   $ankiExpressionFieldInput,
@@ -101,6 +109,22 @@ function stateUpdated(state: State) {
   updateBulb($ankiVocabStatus, state.ankiVocabAvailable)
   updateBulb($dictionaryStatus, state.isTokenizerReady)
   updateBulb($ankiKanjiStatus, state.ankiKanjiAvailable)
+
+  const p = state.dictionaryDownloadProgress
+  if (p.phase === 'complete') {
+    $dictionaryDownloadProgressRow.style.removeProperty('display')
+  } else {
+    $dictionaryDownloadProgressRow.style.display = 'table-row'
+    $dictionaryDownloadTitle.textContent = `[${p.phase}]`
+    if (p.loaded && p.total) {
+      $dictionaryDownloadTitle.textContent += ` ${(p.loaded / 1048576) | 0}/${(p.total / 1048576) | 0} MB (${((p.loaded / p.total) * 100) | 0}%)`
+      $dictionaryDownloadProgress.value = p.loaded
+      $dictionaryDownloadProgress.max = p.total
+    } else {
+      $dictionaryDownloadProgress.value = 0
+      $dictionaryDownloadProgress.max = 1
+    }
+  }
 }
 
 function updateBulb($bulb: HTMLElement, status: boolean | null) {
