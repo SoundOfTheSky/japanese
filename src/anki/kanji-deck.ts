@@ -1,4 +1,8 @@
-import { JPDBKanjiMap } from '../jpdb'
+import {
+  JPDBKanjiMap,
+  KANJI_CONVERT_SIMILAR,
+  KANJI_CONVERT_SIMILAR_R,
+} from '../jpdb'
 import { KANJI_TEXTBOOK, KANJI_TEXTBOOK_MAP } from '../kanji-textbook'
 import { KanjiVG } from '../kanjivg'
 import {
@@ -34,22 +38,6 @@ type NoteFields = {
   MnemonicJPDB: string
   Order: string
 }
-
-const KANJI_CONVERT_SIMILAR = new Map<string, string>(
-  Object.entries({
-    礻: 'ネ',
-    衤: 'ネ',
-    飠: '食',
-    糹: '糸',
-    訁: '言',
-    釒: '金',
-    爫: '爪',
-    牜: '牛',
-  }),
-)
-const KANJI_CONVERT_SIMILAR_R = new Map(
-  KANJI_CONVERT_SIMILAR.entries().map((x) => [x[1], x[0]]),
-)
 
 const noteIds = await ankiFindNotes('"note:JP Kanji"')
 const notes = await ankiNotesInfo(noteIds)
@@ -105,9 +93,7 @@ async function processKanji(kanji: string) {
   const terms = termByKanji.get(kanji) ?? []
   const wkKanji = WKKanjiMap.get(kanji)
   const wkRadical = WKRadicalMap.get(kanji)
-  const jpdb = KANJI_CONVERT_SIMILAR_R.has(kanji)
-    ? JPDBKanjiMap.get(KANJI_CONVERT_SIMILAR_R.get(kanji)!)
-    : JPDBKanjiMap.get(kanji)
+  const jpdb = JPDBKanjiMap.get(KANJI_CONVERT_SIMILAR_R.get(kanji) ?? kanji)
 
   // Aggregate list of meanings from all sources
   const meanings: string[] = []

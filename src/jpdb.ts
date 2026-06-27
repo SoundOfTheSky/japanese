@@ -265,6 +265,23 @@ export async function loadJPDBFile() {
   )
 }
 
+export const KANJI_CONVERT_SIMILAR = new Map<string, string>(
+  Object.entries({
+    礻: 'ネ',
+    衤: 'ネ',
+    飠: '食',
+    糹: '糸',
+    訁: '言',
+    釒: '金',
+    爫: '爪',
+    牜: '牛',
+  }),
+)
+
+export const KANJI_CONVERT_SIMILAR_R = new Map(
+  KANJI_CONVERT_SIMILAR.entries().map((x) => [x[1], x[0]]),
+)
+
 export const JPDBKanji: JPDBKanjiItem[] = []
 export const JPDBKanjiMap = new Map<string, JPDBKanjiItem>()
 

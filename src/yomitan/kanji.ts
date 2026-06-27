@@ -1,3 +1,4 @@
+import { JPDBKanji, JPDBKanjiMap, KANJI_CONVERT_SIMILAR_R } from '../jpdb'
 import { extractKanji } from '../utilities'
 import {
   getKanjiMnemonic,
@@ -16,24 +17,41 @@ export function generateKanji(dictionary: YomitanDictionary) {
   console.log('Building kanji bank...')
   for (let index = 0; index < dictionary.kanji.length; index++) {
     const item = dictionary.kanji[index]!
-    const wkKanji = WKKanjiMap.get(item[0])
-    const wkRadical = WKRadicalMap.get(item[0])
+    const kanji = item[0]
+    const wkKanji = WKKanjiMap.get(kanji)
+    const wkRadical = WKRadicalMap.get(kanji)
+    const jpdb = JPDBKanjiMap.get(KANJI_CONVERT_SIMILAR_R.get(kanji) ?? kanji)
     if (!wkKanji && !wkRadical) continue
     // Similar kanji
-    const similar = wkKanji
-      ? WK.filter(
-          (subject) =>
-            !subject.data.hidden_at &&
-            subject.object === 'kanji' &&
-            subject.id !== wkKanji.id &&
-            (wkKanji.data.visually_similar_subject_ids.includes(subject.id) ||
-              ((subject.data as WKKanji).component_subject_ids.length ===
-                wkKanji.data.component_subject_ids.length &&
-                wkKanji.data.component_subject_ids.every((d) =>
-                  (subject.data as WKKanji).component_subject_ids.includes(d),
-                ))),
-        )
-      : []
+    let similar = ''
+    if (wkKanji)
+      similar += WK.filter(
+        (subject) =>
+          !subject.data.hidden_at &&
+          subject.object === 'kanji' &&
+          subject.id !== wkKanji.id &&
+          (wkKanji.data.visually_similar_subject_ids.includes(subject.id) ||
+            ((subject.data as WKKanji).component_subject_ids.length ===
+              wkKanji.data.component_subject_ids.length &&
+              wkKanji.data.component_subject_ids.every((d) =>
+                (subject.data as WKKanji).component_subject_ids.includes(d),
+              ))),
+      )
+        .map((x) => x.data.characters ?? '')
+        .join('')
+
+    if (jpdb?.composed?.length)
+      similar += JPDBKanji.filter(
+        (x) =>
+          x.kanji !== jpdb.kanji &&
+          x.composed?.length &&
+          x.composed.length === jpdb.composed!.length &&
+          jpdb.composed!.split('').sort().join('') ===
+            x.composed.split('').sort().join(''),
+      )
+        .map((x) => x.kanji)
+        .join('')
+    similar = [...new Set(...similar.split(''))].join('')
     // Other kanji with same radicals
     const componentSubjectIds: number[] = []
     if (wkKanji) componentSubjectIds.push(...wkKanji.data.component_subject_ids)
@@ -46,7 +64,7 @@ export function generateKanji(dictionary: YomitanDictionary) {
         WK.filter(
           (s) =>
             !s.data.hidden_at &&
-            s.data.characters !== item[0] &&
+            s.data.characters !== kanji &&
             s.object === 'kanji' &&
             (s.data as WKKanji).component_subject_ids.includes(id),
         )
@@ -54,6 +72,26 @@ export function generateKanji(dictionary: YomitanDictionary) {
           .join(''),
       ]
     })
+    if (jpdb?.composed) {
+      for (let index = 0; index < jpdb.composed.length; index++) {
+        const composed = jpdb.composed[index]!
+        const item = kanjiWithRadical.find((x) => x[0] === composed) ?? ['', '']
+        if (!item[0]) {
+          item[0] = composed
+          const wkRadical = WKRadicalMap.get(composed)
+          if (wkRadical) item[0] += `(${wkRadical.data.slug})`
+        }
+        for (let index = 0; index < JPDBKanji.length; index++) {
+          const x = JPDBKanji[index]!
+          if (
+            x.composed?.includes(composed) &&
+            x.kanji !== jpdb.kanji &&
+            !item[1]!.includes(x.kanji)
+          )
+            item[1] += kanji
+        }
+      }
+    }
     if (wkKanji) {
       // Add onyomi from WK
       item[1] = [
@@ -91,14 +129,26 @@ export function generateKanji(dictionary: YomitanDictionary) {
           ...item[4],
         ].map((x) => x.toLowerCase()),
       ),
-      clearWKText(`WaniKani Meaning:\n${getKanjiMnemonic(item[0])}`),
+      clearText(
+        `WaniKani Meaning:\n${
+          wkKanji?.data.component_subject_ids.length
+            ? `{${wkKanji.data.component_subject_ids
+                .map((x) => WKIdMap.get(x))
+                .map((x) => x?.data.characters ?? x?.data.slug ?? '')
+                .join(',')}}`
+            : ''
+        }\n${getKanjiMnemonic(kanji)}`,
+      ),
     ]
     if (wkKanji)
       item[4].push(
-        clearWKText(`WaniKani Reading:\n${wkKanji.data.reading_mnemonic}`),
+        clearText(`WaniKani Reading:\n${wkKanji.data.reading_mnemonic}`),
       )
-    if (similar.length > 0)
-      item[4].push('Similar: ' + similar.map((x) => x.data.characters).join(''))
+    if (jpdb?.mnemonic)
+      item[4].push(
+        `JPDB:\n${jpdb.composed ? `{${jpdb.composed.split('').join(',')}}` : ''}\n${clearText(jpdb.mnemonic)}`,
+      )
+    if (similar.length > 0) item[4].push('Similar: ' + similar)
     for (const [radical, words] of kanjiWithRadical)
       item[4].push(`${radical}: ${words}`)
   }
@@ -158,7 +208,7 @@ export function generateKanji(dictionary: YomitanDictionary) {
   }
 }
 
-const clearWKText = (text: string) =>
+const clearText = (text: string) =>
   text
     .replaceAll('<radical>', '{')
     .replaceAll('</radical>', '}')
@@ -170,3 +220,7 @@ const clearWKText = (text: string) =>
     .replaceAll('</reading>', '}')
     .replaceAll('<meaning>', '{')
     .replaceAll('</meaning>', '}')
+    .replaceAll('<strong>', '{')
+    .replaceAll('</strong>', '}')
+    .replaceAll('<em>', '')
+    .replaceAll('</em>', '')
