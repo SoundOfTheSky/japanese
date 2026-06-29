@@ -3,7 +3,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'fs'
 import { file } from 'bun'
 
 import joyouKanji from './joyou-kanji.txt'
-import { cleanupHTML } from './utilities'
+import { cleanupHTML, splitJPCharacters } from './utilities'
 
 export type JPDBKanjiItem = {
   kanji: string
@@ -293,7 +293,7 @@ if (await file('assets/JPDBKanji.json').exists()) {
   )
 } else {
   const kanjiList = []
-  const kanjiToParse = joyouKanji.split('')
+  const kanjiToParse = splitJPCharacters(joyouKanji)
   for (let index = 0; index < kanjiToParse.length; index++) {
     const kanji = kanjiToParse[index]!
     console.log(kanji, index, kanjiToParse.length)

@@ -46,3 +46,8 @@ export function cleanupHTML(
 export function extractKanji(text: string): string[] {
   return text.match(/\p{Script=Han}/gu) ?? []
 }
+
+const seg = new Intl.Segmenter('ja', { granularity: 'grapheme' })
+export function splitJPCharacters(s: string) {
+  return [...seg.segment(s)].map((s) => s.segment)
+}

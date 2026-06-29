@@ -1,5 +1,5 @@
 import { mkdirSync } from 'node:fs'
-import { cp, readdir, rename } from 'node:fs/promises'
+import { cp, readdir } from 'node:fs/promises'
 import Path from 'node:path'
 
 import { chunk } from '@softsky/utils'
@@ -43,7 +43,7 @@ export default class YomitanDictionary {
     await file(indexPath).write(JSON.stringify(this.index))
     for (const bank of BANKS) await this.saveBank(bank)
     await $`zip -r -9 ../../dist/${this.index.title}.zip .`.cwd(path)
-    await rename(indexPath, Path.join('dist', this.index.title + '.json'))
+    await cp(indexPath, Path.join('dist', this.index.title + '.json'))
   }
 
   public async merge(name: string) {

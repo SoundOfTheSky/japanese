@@ -21,7 +21,7 @@ import {
   ankiNotesInfo,
   ankiUpdateNoteFields,
 } from './anki'
-import { kanjiMap, termByKanji } from './dictionary'
+import { kanjiMap } from './dictionary'
 
 type NoteFields = {
   Kanji: string
@@ -90,7 +90,7 @@ async function processKanji(kanji: string) {
   const note = notesMap.get(kanji)
   const textbook = KANJI_TEXTBOOK_MAP.get(kanji)
   const kanjidic = kanjiMap.get(kanji)
-  const terms = termByKanji.get(kanji) ?? []
+  // const terms = termByKanji.get(kanji) ?? []
   const wkKanji = WKKanjiMap.get(kanji)
   const wkRadical = WKRadicalMap.get(kanji)
   const jpdb = JPDBKanjiMap.get(KANJI_CONVERT_SIMILAR_R.get(kanji) ?? kanji)
@@ -107,7 +107,7 @@ async function processKanji(kanji: string) {
       ...wkKanji.data.meanings.filter((x) => x.primary).map((x) => x.meaning),
     )
   if (jpdb?.keyword) meanings.push(jpdb.keyword)
-  if (kanjidic) meanings.push(...kanjidic[4])
+  // if (kanjidic) meanings.push(...kanjidic[4])
   if (wkRadical)
     meanings.push(
       ...wkRadical.data.meanings
@@ -119,12 +119,12 @@ async function processKanji(kanji: string) {
       ...wkKanji.data.meanings.filter((x) => !x.primary).map((x) => x.meaning),
     )
   const vocab = structuredClone(textbook?.vocabulary ?? [])
-  for (const term of terms) {
-    vocab.push({
-      jp: term[0],
-      en: '',
-    })
-  }
+  // for (const term of terms) {
+  //   vocab.push({
+  //     jp: term[0],
+  //     en: '',
+  //   })
+  // }
 
   const noteFields: NoteFields = {
     Kanji: kanji,
@@ -134,9 +134,9 @@ async function processKanji(kanji: string) {
       '; ',
     ),
     Mnemonic: note?.fields.Mnemonic?.value ?? '',
-    MnemonicWK: processWKText(getKanjiMnemonic(kanji) ?? ''),
-    MnemonicReadingWK: processWKText(wkKanji?.data.reading_mnemonic ?? ''),
-    MnemonicJPDB: jpdb?.mnemonic ?? '',
+    MnemonicWK: processText(getKanjiMnemonic(kanji) ?? ''),
+    MnemonicReadingWK: processText(wkKanji?.data.reading_mnemonic ?? ''),
+    MnemonicJPDB: processText(jpdb?.mnemonic ?? ''),
     Vocab:
       vocab.length > 0
         ? `<table><tbody>${vocab
@@ -194,7 +194,7 @@ function getWKKanjiComposed(kanji: string) {
   )
 }
 
-function processWKText(text: string) {
+function processText(text: string) {
   return text
     .replaceAll('<radical>', '<span class="wk-radical">')
     .replaceAll('</radical>', '</span>')
@@ -206,4 +206,9 @@ function processWKText(text: string) {
     .replaceAll('</meaning>', '</span>')
     .replaceAll('<reading>', '<span class="wk-reading">')
     .replaceAll('</reading>', '</span>')
+    .replaceAll('<em><strong>', '<span class="wk-kanji">')
+    .replaceAll('</strong></em>', '</span>')
+    .replaceAll('<strong>', '<span class="wk-radical">')
+    .replaceAll('</strong>', '</span>')
+    .replaceAll('&quot;', '"')
 }

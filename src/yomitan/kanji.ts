@@ -1,5 +1,5 @@
 import { JPDBKanji, JPDBKanjiMap, KANJI_CONVERT_SIMILAR_R } from '../jpdb'
-import { extractKanji } from '../utilities'
+import { extractKanji, splitJPCharacters } from '../utilities'
 import {
   getKanjiMnemonic,
   WK,
@@ -46,12 +46,12 @@ export function generateKanji(dictionary: YomitanDictionary) {
           x.kanji !== jpdb.kanji &&
           x.composed?.length &&
           x.composed.length === jpdb.composed!.length &&
-          jpdb.composed!.split('').sort().join('') ===
-            x.composed.split('').sort().join(''),
+          splitJPCharacters(jpdb.composed!).sort().join('') ===
+            splitJPCharacters(x.composed).sort().join(''),
       )
         .map((x) => x.kanji)
         .join('')
-    similar = [...new Set(...similar.split(''))].join('')
+    similar = [...new Set(...splitJPCharacters(similar))].join('')
     // Other kanji with same radicals
     const componentSubjectIds: number[] = []
     if (wkKanji) componentSubjectIds.push(...wkKanji.data.component_subject_ids)
@@ -130,7 +130,7 @@ export function generateKanji(dictionary: YomitanDictionary) {
         ].map((x) => x.toLowerCase()),
       ),
       clearText(
-        `WaniKani Meaning:\n${
+        `WaniKani Meaning: ${
           wkKanji?.data.component_subject_ids.length
             ? `{${wkKanji.data.component_subject_ids
                 .map((x) => WKIdMap.get(x))
@@ -144,10 +144,13 @@ export function generateKanji(dictionary: YomitanDictionary) {
       item[4].push(
         clearText(`WaniKani Reading:\n${wkKanji.data.reading_mnemonic}`),
       )
-    if (jpdb?.mnemonic)
-      item[4].push(
-        `JPDB:\n${jpdb.composed ? `{${jpdb.composed.split('').join(',')}}` : ''}\n${clearText(jpdb.mnemonic)}`,
-      )
+    if (jpdb) {
+      let line = ''
+      if (jpdb.composed)
+        line += `{${splitJPCharacters(jpdb.composed).join(',')}}`
+      if (jpdb.mnemonic) line += `\n${clearText(jpdb.mnemonic)}`
+      if (line) item[4].push(`JPDB: ${line}`)
+    }
     if (similar.length > 0) item[4].push('Similar: ' + similar)
     for (const [radical, words] of kanjiWithRadical)
       item[4].push(`${radical}: ${words}`)
@@ -220,7 +223,8 @@ const clearText = (text: string) =>
     .replaceAll('</reading>', '}')
     .replaceAll('<meaning>', '{')
     .replaceAll('</meaning>', '}')
+    .replaceAll('<em><strong>', '[')
+    .replaceAll('</strong></em>', ']')
     .replaceAll('<strong>', '{')
     .replaceAll('</strong>', '}')
-    .replaceAll('<em>', '')
-    .replaceAll('</em>', '')
+    .replaceAll('&quot;', '"')

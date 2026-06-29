@@ -12,7 +12,11 @@ export function ankiInvoke<T>(action: string, params = {}) {
   })
     .then((x) => x.json() as Promise<{ result: T; error?: string }>)
     .then((data) => {
-      if (data.error) throw new Error(data.error)
+      if (data.error) {
+        console.log(params)
+        throw new Error(data.error)
+      }
+
       return data.result
     })
 }
